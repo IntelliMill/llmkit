@@ -33,12 +33,12 @@ Java AI エコシステムには現在、**Spring AI**（Spring Boot と強く�
 ```xml
 <!-- コア API + OpenAI プロバイダ -->
 <dependency>
-    <groupId>io.llmkit</groupId>
+    <groupId>com.github.intellimill</groupId>
     <artifactId>llmkit-api</artifactId>
     <version>0.1.0</version>
 </dependency>
 <dependency>
-    <groupId>io.llmkit</groupId>
+    <groupId>com.github.intellimill</groupId>
     <artifactId>llmkit-openai</artifactId>
     <version>0.1.0</version>
 </dependency>

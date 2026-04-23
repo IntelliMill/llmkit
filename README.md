@@ -33,12 +33,12 @@ Java AI ecosystem only has two mainstream choices: **Spring AI** (strongly coupl
 ```xml
 <!-- Core API + OpenAI provider -->
 <dependency>
-    <groupId>io.llmkit</groupId>
+    <groupId>com.github.intellimill</groupId>
     <artifactId>llmkit-api</artifactId>
     <version>0.1.0</version>
 </dependency>
 <dependency>
-    <groupId>io.llmkit</groupId>
+    <groupId>com.github.intellimill</groupId>
     <artifactId>llmkit-openai</artifactId>
     <version>0.1.0</version>
 </dependency>
