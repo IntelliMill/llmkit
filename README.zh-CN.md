@@ -33,12 +33,12 @@ Java AI 生态目前只有两个主流选择：**Spring AI**（强耦合 Spring 
 ```xml
 <!-- 核心 API + OpenAI Provider -->
 <dependency>
-    <groupId>com.github.intellimill</groupId>
+    <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-api</artifactId>
     <version>0.1.0</version>
 </dependency>
 <dependency>
-    <groupId>com.github.intellimill</groupId>
+    <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-openai</artifactId>
     <version>0.1.0</version>
 </dependency>

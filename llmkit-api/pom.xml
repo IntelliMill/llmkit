@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.intellimill</groupId>
+        <groupId>io.github.intellimill</groupId>
         <artifactId>llmkit-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>

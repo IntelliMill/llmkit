@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.intellimill</groupId>
+    <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -42,22 +42,22 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.github.intellimill</groupId>
+                <groupId>io.github.intellimill</groupId>
                 <artifactId>llmkit-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.intellimill</groupId>
+                <groupId>io.github.intellimill</groupId>
                 <artifactId>llmkit-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.intellimill</groupId>
+                <groupId>io.github.intellimill</groupId>
                 <artifactId>llmkit-openai</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.intellimill</groupId>
+                <groupId>io.github.intellimill</groupId>
                 <artifactId>llmkit-anthropic</artifactId>
                 <version>${project.version}</version>
             </dependency>

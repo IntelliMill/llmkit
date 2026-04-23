@@ -33,12 +33,12 @@ Java AI 생태계에는 현재 **Spring AI**(Spring Boot와 강결합, 130+ 모�
 ```xml
 <!-- 코어 API + OpenAI 프로바이더 -->
 <dependency>
-    <groupId>com.github.intellimill</groupId>
+    <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-api</artifactId>
     <version>0.1.0</version>
 </dependency>
 <dependency>
-    <groupId>com.github.intellimill</groupId>
+    <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-openai</artifactId>
     <version>0.1.0</version>
 </dependency>
