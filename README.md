@@ -21,7 +21,6 @@ Java AI ecosystem only has two mainstream choices: **Spring AI** (strongly coupl
 |---------|--------|-----------|-------------|
 | JDK Baseline | **8** | 17 | 17 |
 | Framework Dependency | **None** | Spring Boot | None |
-| Module Count | **5** | 130+ | 90+ |
 | External Dependencies | **0** | Many | Many |
 | Hello World Lines | **3** | 10+ | 5+ |
 | JAR Size (core) | **< 200KB** | ~50MB | ~10MB |
@@ -66,6 +65,31 @@ LlmClient anthropic = LlmKit.builder(Providers.ANTHROPIC)
     .apiKey("sk-ant-xxx")
     .model("claude-sonnet-4-20250514")
     .build();
+
+// DeepSeek
+LlmClient deepseek = LlmKit.builder(Providers.DEEPSEEK)
+    .apiKey("sk-xxx")
+    .build();
+
+// GLM (Zhipu AI)
+LlmClient glm = LlmKit.builder(Providers.GLM)
+    .apiKey("xxx.xxx")
+    .build();
+
+// Qwen (DashScope)
+LlmClient qwen = LlmKit.builder(Providers.QWEN)
+    .apiKey("sk-xxx")
+    .build();
+
+// MiniMax
+LlmClient minimax = LlmKit.builder(Providers.MINIMAX)
+    .apiKey("test-key")
+    .build();
+
+// Kimi (Moonshot AI)
+LlmClient kimi = LlmKit.builder(Providers.KIMI)
+    .apiKey("sk-xxx")
+    .build();
 ```
 
 ### Streaming
@@ -85,13 +109,13 @@ client.chatStream(
 );
 ```
 
-### Custom Endpoint (DeepSeek, Ollama, Moonshot...)
+### Custom Endpoint (Ollama, other OpenAI-compatible services)
 
 ```java
-LlmClient deepseek = LlmKit.builder(Providers.OPENAI)
-    .apiKey("sk-xxx")
-    .baseUrl("https://api.deepseek.com/v1")
-    .model("deepseek-chat")
+LlmClient ollama = LlmKit.builder(Providers.OPENAI)
+    .apiKey("unused")
+    .baseUrl("http://localhost:11434")
+    .model("llama3")
     .build();
 ```
 
@@ -135,12 +159,33 @@ if (response.content() == null && !response.getChoices().get(0).getMessage().get
 ## Architecture
 
 ```
-llmkit-api       Core API (zero dependencies)
-llmkit-core      HTTP, SSE, JSON, retry logic
-llmkit-openai    OpenAI provider (Chat Completions API)
-llmkit-anthropic Anthropic provider (Messages API)
-llmkit-examples  Example code
+llmkit-api                          Core API (zero dependencies)
+llmkit-core                         HTTP, SSE, JSON, retry logic
+llmkit-protocols/
+  llmkit-openai-protocol            OpenAI protocol (codec, base client)
+  llmkit-anthropic-protocol         Anthropic protocol (codec, base client)
+llmkit-providers/
+  llmkit-openai                     OpenAI provider
+  llmkit-anthropic                  Anthropic provider
+  llmkit-deepseek                   DeepSeek provider
+  llmkit-glm                        GLM (Zhipu AI) provider
+  llmkit-qwen                       Qwen (DashScope) provider
+  llmkit-minimax                    MiniMax provider
+  llmkit-kimi                       Kimi (Moonshot AI) provider
+llmkit-examples                     Example code
 ```
+
+### Supported Providers
+
+| Provider | Constant | Default Model |
+|----------|----------|---------------|
+| OpenAI | `Providers.OPENAI` | gpt-4o |
+| Anthropic | `Providers.ANTHROPIC` | claude-sonnet-4-20250514 |
+| DeepSeek | `Providers.DEEPSEEK` | deepseek-chat |
+| GLM (Zhipu AI) | `Providers.GLM` | glm-4 |
+| Qwen (DashScope) | `Providers.QWEN` | qwen-plus |
+| MiniMax | `Providers.MINIMAX` | MiniMax-Text-01 |
+| Kimi (Moonshot AI) | `Providers.KIMI` | moonshot-v1-8k |
 
 ### Design Principles
 

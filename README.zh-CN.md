@@ -21,7 +21,6 @@ Java AI 生态目前只有两个主流选择：**Spring AI**（强耦合 Spring 
 |------|--------|-----------|-------------|
 | JDK 基线 | **8** | 17 | 17 |
 | 框架依赖 | **无** | Spring Boot | 无 |
-| 模块数量 | **5** | 130+ | 90+ |
 | 外部依赖 | **0** | 大量 | 大量 |
 | Hello World 代码行数 | **3** | 10+ | 5+ |
 | JAR 大小（核心） | **< 200KB** | ~50MB | ~10MB |
@@ -66,6 +65,31 @@ LlmClient anthropic = LlmKit.builder(Providers.ANTHROPIC)
     .apiKey("sk-ant-xxx")
     .model("claude-sonnet-4-20250514")
     .build();
+
+// DeepSeek
+LlmClient deepseek = LlmKit.builder(Providers.DEEPSEEK)
+    .apiKey("sk-xxx")
+    .build();
+
+// GLM（智谱 AI）
+LlmClient glm = LlmKit.builder(Providers.GLM)
+    .apiKey("xxx.xxx")
+    .build();
+
+// 通义千问（DashScope）
+LlmClient qwen = LlmKit.builder(Providers.QWEN)
+    .apiKey("sk-xxx")
+    .build();
+
+// MiniMax
+LlmClient minimax = LlmKit.builder(Providers.MINIMAX)
+    .apiKey("test-key")
+    .build();
+
+// Kimi（月之暗面）
+LlmClient kimi = LlmKit.builder(Providers.KIMI)
+    .apiKey("sk-xxx")
+    .build();
 ```
 
 ### 流式输出
@@ -85,13 +109,13 @@ client.chatStream(
 );
 ```
 
-### 自定义端点（DeepSeek、Ollama、Moonshot 等）
+### 自定义端点（Ollama 等其他 OpenAI 兼容服务）
 
 ```java
-LlmClient deepseek = LlmKit.builder(Providers.OPENAI)
-    .apiKey("sk-xxx")
-    .baseUrl("https://api.deepseek.com/v1")
-    .model("deepseek-chat")
+LlmClient ollama = LlmKit.builder(Providers.OPENAI)
+    .apiKey("unused")
+    .baseUrl("http://localhost:11434")
+    .model("llama3")
     .build();
 ```
 
@@ -135,12 +159,33 @@ if (response.content() == null && !response.getChoices().get(0).getMessage().get
 ## 架构
 
 ```
-llmkit-api       核心 API（零依赖）
-llmkit-core      HTTP、SSE、JSON、重试逻辑
-llmkit-openai    OpenAI Provider（Chat Completions API）
-llmkit-anthropic Anthropic Provider（Messages API）
-llmkit-examples  示例代码
+llmkit-api                          核心 API（零依赖）
+llmkit-core                         HTTP、SSE、JSON、重试逻辑
+llmkit-protocols/
+  llmkit-openai-protocol            OpenAI 协议（编解码、基础客户端）
+  llmkit-anthropic-protocol         Anthropic 协议（编解码、基础客户端）
+llmkit-providers/
+  llmkit-openai                     OpenAI Provider
+  llmkit-anthropic                  Anthropic Provider
+  llmkit-deepseek                   DeepSeek Provider
+  llmkit-glm                        GLM（智谱 AI）Provider
+  llmkit-qwen                       通义千问（DashScope）Provider
+  llmkit-minimax                    MiniMax Provider
+  llmkit-kimi                       Kimi（月之暗面）Provider
+llmkit-examples                     示例代码
 ```
+
+### 支持的 Provider
+
+| Provider | 常量 | 默认模型 |
+|----------|------|---------|
+| OpenAI | `Providers.OPENAI` | gpt-4o |
+| Anthropic | `Providers.ANTHROPIC` | claude-sonnet-4-20250514 |
+| DeepSeek | `Providers.DEEPSEEK` | deepseek-chat |
+| GLM（智谱 AI） | `Providers.GLM` | glm-4 |
+| 通义千问（DashScope） | `Providers.QWEN` | qwen-plus |
+| MiniMax | `Providers.MINIMAX` | MiniMax-Text-01 |
+| Kimi（月之暗面） | `Providers.KIMI` | moonshot-v1-8k |
 
 ### 设计原则
 

@@ -23,5 +23,25 @@
             <groupId>io.github.intellimill</groupId>
             <artifactId>llmkit-anthropic</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.intellimill</groupId>
+            <artifactId>llmkit-deepseek</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.intellimill</groupId>
+            <artifactId>llmkit-glm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.intellimill</groupId>
+            <artifactId>llmkit-qwen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.intellimill</groupId>
+            <artifactId>llmkit-minimax</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.intellimill</groupId>
+            <artifactId>llmkit-kimi</artifactId>
+        </dependency>
     </dependencies>
 </project>

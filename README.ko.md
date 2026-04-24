@@ -21,7 +21,6 @@ Java AI 생태계에는 현재 **Spring AI**(Spring Boot와 강결합, 130+ 모�
 |------|--------|-----------|-------------|
 | JDK 기준 | **8** | 17 | 17 |
 | 프레임워크 의존 | **없음** | Spring Boot | 없음 |
-| 모듈 수 | **5** | 130+ | 90+ |
 | 외부 의존성 | **0** | 다수 | 다수 |
 | Hello World 줄 수 | **3** | 10+ | 5+ |
 | JAR 크기(코어) | **< 200KB** | ~50MB | ~10MB |
@@ -66,6 +65,31 @@ LlmClient anthropic = LlmKit.builder(Providers.ANTHROPIC)
     .apiKey("sk-ant-xxx")
     .model("claude-sonnet-4-20250514")
     .build();
+
+// DeepSeek
+LlmClient deepseek = LlmKit.builder(Providers.DEEPSEEK)
+    .apiKey("sk-xxx")
+    .build();
+
+// GLM (Zhipu AI)
+LlmClient glm = LlmKit.builder(Providers.GLM)
+    .apiKey("xxx.xxx")
+    .build();
+
+// Qwen (DashScope)
+LlmClient qwen = LlmKit.builder(Providers.QWEN)
+    .apiKey("sk-xxx")
+    .build();
+
+// MiniMax
+LlmClient minimax = LlmKit.builder(Providers.MINIMAX)
+    .apiKey("test-key")
+    .build();
+
+// Kimi (Moonshot AI)
+LlmClient kimi = LlmKit.builder(Providers.KIMI)
+    .apiKey("sk-xxx")
+    .build();
 ```
 
 ### 스트리밍
@@ -85,13 +109,13 @@ client.chatStream(
 );
 ```
 
-### 커스텀 엔드포인트 (DeepSeek, Ollama, Moonshot 등)
+### 커스텀 엔드포인트 (Ollama 등 OpenAI 호환 서비스)
 
 ```java
-LlmClient deepseek = LlmKit.builder(Providers.OPENAI)
-    .apiKey("sk-xxx")
-    .baseUrl("https://api.deepseek.com/v1")
-    .model("deepseek-chat")
+LlmClient ollama = LlmKit.builder(Providers.OPENAI)
+    .apiKey("unused")
+    .baseUrl("http://localhost:11434")
+    .model("llama3")
     .build();
 ```
 
@@ -135,12 +159,33 @@ if (response.content() == null && !response.getChoices().get(0).getMessage().get
 ## 아키텍처
 
 ```
-llmkit-api       코어 API (제로 의존성)
-llmkit-core      HTTP, SSE, JSON, 재시도 로직
-llmkit-openai    OpenAI 프로바이더 (Chat Completions API)
-llmkit-anthropic Anthropic 프로바이더 (Messages API)
-llmkit-examples  예제 코드
+llmkit-api                          코어 API (제로 의존성)
+llmkit-core                         HTTP, SSE, JSON, 재시도 로직
+llmkit-protocols/
+  llmkit-openai-protocol            OpenAI 프로토콜 (코덱, 베이스 클라이언트)
+  llmkit-anthropic-protocol         Anthropic 프로토콜 (코덱, 베이스 클라이언트)
+llmkit-providers/
+  llmkit-openai                     OpenAI 프로바이더
+  llmkit-anthropic                  Anthropic 프로바이더
+  llmkit-deepseek                   DeepSeek 프로바이더
+  llmkit-glm                        GLM (Zhipu AI) 프로바이더
+  llmkit-qwen                       Qwen (DashScope) 프로바이더
+  llmkit-minimax                    MiniMax 프로바이더
+  llmkit-kimi                       Kimi (Moonshot AI) 프로바이더
+llmkit-examples                     예제 코드
 ```
+
+### 지원 프로바이더
+
+| 프로바이더 | 상수 | 기본 모델 |
+|-----------|------|----------|
+| OpenAI | `Providers.OPENAI` | gpt-4o |
+| Anthropic | `Providers.ANTHROPIC` | claude-sonnet-4-20250514 |
+| DeepSeek | `Providers.DEEPSEEK` | deepseek-chat |
+| GLM (Zhipu AI) | `Providers.GLM` | glm-4 |
+| Qwen (DashScope) | `Providers.QWEN` | qwen-plus |
+| MiniMax | `Providers.MINIMAX` | MiniMax-Text-01 |
+| Kimi (Moonshot AI) | `Providers.KIMI` | moonshot-v1-8k |
 
 ### 설계 원칙
 

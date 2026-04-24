@@ -38,8 +38,15 @@
     <modules>
         <module>llmkit-api</module>
         <module>llmkit-core</module>
-        <module>llmkit-openai</module>
-        <module>llmkit-anthropic</module>
+        <module>llmkit-protocols/llmkit-openai-protocol</module>
+        <module>llmkit-protocols/llmkit-anthropic-protocol</module>
+        <module>llmkit-providers/llmkit-openai</module>
+        <module>llmkit-providers/llmkit-anthropic</module>
+        <module>llmkit-providers/llmkit-deepseek</module>
+        <module>llmkit-providers/llmkit-glm</module>
+        <module>llmkit-providers/llmkit-qwen</module>
+        <module>llmkit-providers/llmkit-minimax</module>
+        <module>llmkit-providers/llmkit-kimi</module>
         <module>llmkit-examples</module>
     </modules>
 
@@ -67,12 +74,47 @@
             </dependency>
             <dependency>
                 <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-openai-protocol</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-anthropic-protocol</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
                 <artifactId>llmkit-openai</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.intellimill</groupId>
                 <artifactId>llmkit-anthropic</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-deepseek</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-glm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-qwen</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-minimax</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.intellimill</groupId>
+                <artifactId>llmkit-kimi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

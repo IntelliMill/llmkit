@@ -10,5 +10,10 @@ class ProvidersTest {
   void constantValues() {
     assertEquals("openai", Providers.OPENAI);
     assertEquals("anthropic", Providers.ANTHROPIC);
+    assertEquals("deepseek", Providers.DEEPSEEK);
+    assertEquals("glm", Providers.GLM);
+    assertEquals("qwen", Providers.QWEN);
+    assertEquals("minimax", Providers.MINIMAX);
+    assertEquals("kimi", Providers.KIMI);
   }
 }

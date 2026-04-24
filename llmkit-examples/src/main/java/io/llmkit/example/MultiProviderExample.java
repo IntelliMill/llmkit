@@ -34,21 +34,24 @@ public class MultiProviderExample {
             ChatRequest.builder().addMessage(ChatMessage.user("Hello from Anthropic!")).build());
     System.out.println("Anthropic: " + response.content());
 
-    // Use a custom OpenAI-compatible endpoint (e.g. DeepSeek)
-    LlmClient deepseek =
-        LlmKit.builder(Providers.OPENAI)
-            .apiKey("sk-xxx")
-            .baseUrl("https://api.deepseek.com/v1")
-            .model("deepseek-chat")
-            .build();
+    // Use DeepSeek (OpenAI-compatible protocol)
+    LlmClient deepseek = LlmKit.builder(Providers.DEEPSEEK).apiKey("sk-xxx").build();
 
     response =
         deepseek.chat(
             ChatRequest.builder().addMessage(ChatMessage.user("Hello from DeepSeek!")).build());
     System.out.println("DeepSeek: " + response.content());
 
+    // Use GLM (Zhipu AI, OpenAI-compatible protocol)
+    LlmClient glm = LlmKit.builder(Providers.GLM).apiKey("xxx.xxx").build();
+
+    response =
+        glm.chat(ChatRequest.builder().addMessage(ChatMessage.user("Hello from GLM!")).build());
+    System.out.println("GLM: " + response.content());
+
     openai.close();
     anthropic.close();
     deepseek.close();
+    glm.close();
   }
 }
