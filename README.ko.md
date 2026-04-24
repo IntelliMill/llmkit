@@ -1,6 +1,6 @@
 # llmkit
 
-[![CI](https://github.com/IntelliMill/llmkit/actions/workflows/ci/badge.svg)](https://github.com/IntelliMill/llmkit/actions/workflows/ci)
+[![CI](https://github.com/IntelliMill/llmkit/actions/workflows/ci.yml/badge.svg)](https://github.com/IntelliMill/llmkit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java 8+](https://img.shields.io/badge/Java-8%2B-blue.svg)](https://adoptium.net/)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-green.svg)]()
