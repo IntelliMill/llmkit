@@ -159,6 +159,91 @@ nav {
 
 .theme-toggle svg { width: 18px; height: 18px; }
 
+.lang-switcher {
+  position: relative;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s;
+}
+
+.lang-btn:hover {
+  color: var(--text-primary);
+  background: var(--border);
+}
+
+.lang-btn svg { width: 18px; height: 18px; }
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 4px;
+  min-width: 140px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  z-index: 100;
+}
+
+.lang-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lang-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  gap: 8px;
+}
+
+.lang-menu button:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.lang-menu button.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.lang-menu button .check {
+  width: 16px;
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.lang-menu button.active .check {
+  opacity: 1;
+}
+
 /* ── Shared ── */
 section {
   padding: 120px 24px;
@@ -214,7 +299,7 @@ section {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: 52px;
+  padding: 52px 24px 0;
   position: relative;
   overflow: hidden;
 }
@@ -236,6 +321,7 @@ section {
   position: relative;
   z-index: 1;
   max-width: 800px;
+  width: 100%;
 }
 
 .hero-badge {
@@ -331,10 +417,11 @@ section {
   padding: 28px 32px;
   text-align: left;
   max-width: 560px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.05) inset;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .hero-code::before {
@@ -368,7 +455,20 @@ section {
   font-size: 14px;
   line-height: 1.7;
   color: var(--code-text);
-  overflow-x: auto;
+  white-space: pre;
+}
+
+.hero-code::-webkit-scrollbar {
+  height: 4px;
+}
+
+.hero-code::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hero-code::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
 }
 
 .hero-code pre .kw { color: #cba6f7; }
@@ -495,6 +595,22 @@ section {
   font-size: 13px;
   line-height: 1.7;
   color: var(--code-text);
+  white-space: pre;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-body pre::-webkit-scrollbar {
+  height: 4px;
+}
+
+.code-body pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-body pre::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
 }
 
 .code-body pre .kw { color: #cba6f7; }
@@ -842,21 +958,72 @@ footer {
   text-decoration: none;
 }
 
+/* ── Tablet ── */
+@media (max-width: 1024px) {
+  .hero-code { max-width: 100%; }
+  .hero-actions { gap: 12px; }
+}
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .nav-links .nav-link-text { display: none; }
   .features-grid { grid-template-columns: 1fr; }
   .quickstart-cols { grid-template-columns: 1fr; }
   .providers-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-code { padding: 20px; }
-  .hero-code pre { font-size: 12px; }
   section { padding: 80px 20px; }
-  .arch-layer { padding: 18px 20px; }
-  .tabs-nav { overflow-x: auto; }
+
+  /* Hero */
+  #hero { padding: 52px 16px 0; }
+  .hero-code { padding: 20px; max-width: 100%; }
+  .hero-code pre { font-size: 12px; }
+  .hero-actions { flex-direction: column; width: 100%; gap: 10px; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+
+  /* Feature cards */
+  .feature-card { padding: 28px; }
+
+  /* Code blocks */
+  .code-block { border-radius: 12px; margin: 12px 0; }
+  .code-header { padding: 10px 14px; }
+  .code-body { padding: 14px; }
+  .code-body pre { font-size: 12px; line-height: 1.6; }
+  .code-block { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+  /* Tabs */
+  .tabs-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tabs-nav::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 8px 14px; font-size: 12px; white-space: nowrap; }
+  .tabs-container { margin-top: 28px; }
+
+  /* Architecture */
+  .arch-layer { padding: 18px 16px; border-radius: 12px; }
+  .arch-layer .modules { gap: 6px; }
+  .arch-module { padding: 4px 10px; font-size: 11px; }
+  .arch-connector { height: 28px; }
+  .arch-layer-label { font-size: 15px; }
+  .arch-layer-desc { font-size: 12px; }
+
+  /* Provider cards */
+  .provider-card { padding: 18px; }
+
+  /* API items */
+  .api-item { border-radius: 12px; }
+  .api-item-header { padding: 16px 18px; }
+
+  /* Section text */
+  .section-title { margin-bottom: 12px; }
+  .section-desc { font-size: 16px; }
 }
 
 @media (max-width: 480px) {
   .providers-grid { grid-template-columns: 1fr; }
+  .hero-code { padding: 16px; }
+  .hero-code pre { font-size: 11px; }
+  .code-body pre { font-size: 11px; }
+  .code-header { padding: 8px 12px; }
+  .code-body { padding: 12px; }
+  .section-inner { padding: 0; }
+  .nav-inner { padding: 0 16px; }
 }
 
 /* ── Scroll Progress ── */
@@ -915,11 +1082,11 @@ footer {
     </a>
     <div style="display:flex;align-items:center;gap:12px;">
       <ul class="nav-links" id="navLinks">
-        <li><a href="#features" class="nav-link-text">核心定位</a></li>
-        <li><a href="#quickstart" class="nav-link-text">快速开始</a></li>
-        <li><a href="#architecture" class="nav-link-text">架构</a></li>
-        <li><a href="#providers" class="nav-link-text">模型</a></li>
-        <li><a href="#api" class="nav-link-text">API</a></li>
+        <li><a href="#features" class="nav-link-text" data-i18n="nav.features">核心定位</a></li>
+        <li><a href="#quickstart" class="nav-link-text" data-i18n="nav.quickstart">快速开始</a></li>
+        <li><a href="#architecture" class="nav-link-text" data-i18n="nav.architecture">架构</a></li>
+        <li><a href="#providers" class="nav-link-text" data-i18n="nav.providers">模型</a></li>
+        <li><a href="#api" class="nav-link-text" data-i18n="nav.api">API</a></li>
         <li>
           <a href="https://github.com/IntelliMill/llmkit" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:5px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -927,6 +1094,17 @@ footer {
           </a>
         </li>
       </ul>
+      <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Language">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </button>
+        <div class="lang-menu" id="langMenu">
+          <button data-lang="zh"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>中文</button>
+          <button data-lang="en"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>English</button>
+          <button data-lang="ja"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>日本語</button>
+          <button data-lang="ko"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>한국어</button>
+        </div>
+      </div>
       <button class="nav-mobile-toggle" id="mobileToggle" aria-label="菜单">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
@@ -942,10 +1120,10 @@ footer {
 <section id="hero">
   <div class="hero-content">
     <h1 class="hero-title reveal">LLMKit</h1>
-    <p class="hero-subtitle reveal">Java LLM 客户端的终极选择</p>
-    <p class="hero-tagline reveal">轻量 · 零依赖 · 多模型</p>
+    <p class="hero-subtitle reveal" data-i18n="hero.subtitle">Java LLM 客户端的终极选择</p>
+    <p class="hero-tagline reveal" data-i18n="hero.tagline">轻量 · 零依赖 · 多模型</p>
     <div class="hero-actions reveal">
-      <a href="#quickstart" class="btn btn-primary">快速开始</a>
+      <a href="#quickstart" class="btn btn-primary" data-i18n="hero.cta1">快速开始</a>
       <a href="https://github.com/IntelliMill/llmkit" target="_blank" rel="noopener" class="btn btn-secondary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
         GitHub
@@ -964,36 +1142,36 @@ footer {
 <section id="features">
   <div class="section-inner">
     <div class="section-label reveal">Core</div>
-    <h2 class="section-title reveal">为什么选择 LLMKit</h2>
-    <p class="section-desc reveal">做一件事，做到极致。LLMKit 专注于为 Java 开发者提供最轻量的 LLM 调用体验。</p>
+    <h2 class="section-title reveal" data-i18n="features.title">为什么选择 LLMKit</h2>
+    <p class="section-desc reveal" data-i18n="features.desc">做一件事，做到极致。LLMKit 专注于为 Java 开发者提供最轻量的 LLM 调用体验。</p>
     <div class="features-grid">
       <div class="feature-card reveal">
         <div class="feature-icon zero-dep">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
         </div>
-        <h3>零外部依赖</h3>
-        <p>不依赖 Jackson、Gson、OkHttp 等任何第三方库，仅使用 JDK 标准 API。没有依赖冲突，没有版本地狱。</p>
+        <h3 data-i18n="features.zeroDep.title">零外部依赖</h3>
+        <p data-i18n="features.zeroDep.desc">不依赖 Jackson、Gson、OkHttp 等任何第三方库，仅使用 JDK 标准 API。没有依赖冲突，没有版本地狱。</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon jdk8">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
         </div>
-        <h3>JDK 8+</h3>
-        <p>兼容 JDK 8，而 Spring AI 和 Langchain4j 需要 JDK 17+。无论你的项目跑在什么环境，都能直接使用。</p>
+        <h3 data-i18n="features.jdk8.title">JDK 8+</h3>
+        <p data-i18n="features.jdk8.desc">兼容 JDK 8，而 Spring AI 和 Langchain4j 需要 JDK 17+。无论你的项目跑在什么环境，都能直接使用。</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon multi">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
-        <h3>多模型统一 API</h3>
-        <p>支持多个主流 LLM 提供商，一套 API 切换自如。只需改一行配置，即可在 OpenAI、Anthropic、DeepSeek 等模型间无缝切换。</p>
+        <h3 data-i18n="features.multi.title">多模型统一 API</h3>
+        <p data-i18n="features.multi.desc">支持多个主流 LLM 提供商，一套 API 切换自如。只需改一行配置，即可在 OpenAI、Anthropic、DeepSeek 等模型间无缝切换。</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon light">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         </div>
-        <h3>极致轻量</h3>
-        <p>核心 JAR 不到 200KB，启动即用。没有冗余抽象，没有框架绑定，就是一个纯粹的 LLM 客户端。</p>
+        <h3 data-i18n="features.light.title">极致轻量</h3>
+        <p data-i18n="features.light.desc">核心 JAR 不到 200KB，启动即用。没有冗余抽象，没有框架绑定，就是一个纯粹的 LLM 客户端。</p>
       </div>
     </div>
   </div>
@@ -1003,12 +1181,12 @@ footer {
 <section id="quickstart">
   <div class="section-inner">
     <div class="section-label reveal">Getting Started</div>
-    <h2 class="section-title reveal">三行代码，即刻开始</h2>
-    <p class="section-desc reveal">添加依赖，初始化客户端，开始对话。就是这么简单。</p>
+    <h2 class="section-title reveal" data-i18n="quickstart.title">三行代码，即刻开始</h2>
+    <p class="section-desc reveal" data-i18n="quickstart.desc">添加依赖，初始化客户端，开始对话。就是这么简单。</p>
 
     <div class="quickstart-cols">
       <div class="reveal">
-        <p style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text-secondary);">1. 添加 Maven 依赖</p>
+        <p style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text-secondary);" data-i18n="quickstart.step1">1. 添加 Maven 依赖</p>
         <div class="code-block">
           <div class="code-header">
             <span class="code-lang">XML</span>
@@ -1021,7 +1199,7 @@ footer {
 <span class="tag">&lt;/dependency&gt;</span></pre></div>
         </div>
 
-        <p style="font-size:14px;font-weight:600;margin-bottom:12px;margin-top:24px;color:var(--text-secondary);">2. 编写代码</p>
+        <p style="font-size:14px;font-weight:600;margin-bottom:12px;margin-top:24px;color:var(--text-secondary);" data-i18n="quickstart.step2">2. 编写代码</p>
         <div class="code-block">
           <div class="code-header">
             <span class="code-lang">Java</span>
@@ -1036,7 +1214,7 @@ footer {
       </div>
 
       <div class="reveal">
-        <p style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text-secondary);">3. Switch Provider</p>
+        <p style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text-secondary);" data-i18n="quickstart.step3">3. Switch Provider</p>
         <div class="tabs-container">
           <div class="tabs-nav">
             <button class="tab-btn active" data-tab="tab-openai">OpenAI</button>
@@ -1121,13 +1299,13 @@ footer {
 <section id="architecture">
   <div class="section-inner">
     <div class="section-label reveal">Architecture</div>
-    <h2 class="section-title reveal">清晰的分层架构</h2>
-    <p class="section-desc reveal">模块化设计，职责分明。从 API 层到 Provider 层，每一层都可以独立替换和扩展。</p>
+    <h2 class="section-title reveal" data-i18n="arch.title">清晰的分层架构</h2>
+    <p class="section-desc reveal" data-i18n="arch.desc">模块化设计，职责分明。从 API 层到 Provider 层，每一层都可以独立替换和扩展。</p>
 
     <div class="arch-diagram">
       <div class="arch-layer reveal" style="max-width:720px;">
         <div class="arch-layer-label">llmkit-api</div>
-        <div class="arch-layer-desc">接口 + 模型，零依赖 · 包名: io.llmkit</div>
+        <div class="arch-layer-desc" data-i18n="arch.api.desc">接口 + 模型，零依赖 · 包名: io.llmkit</div>
         <div class="modules">
           <span class="arch-module api">LlmClient</span>
           <span class="arch-module api">LlmClientBuilder</span>
@@ -1142,7 +1320,7 @@ footer {
 
       <div class="arch-layer reveal" style="max-width:720px;">
         <div class="arch-layer-label">llmkit-core</div>
-        <div class="arch-layer-desc">HTTP 客户端 · SSE 解析 · JSON 读写 · 重试策略</div>
+        <div class="arch-layer-desc" data-i18n="arch.core.desc">HTTP 客户端 · SSE 解析 · JSON 读写 · 重试策略</div>
         <div class="modules">
           <span class="arch-module core">JdkHttpClient</span>
           <span class="arch-module core">SseParser</span>
@@ -1156,7 +1334,7 @@ footer {
 
       <div class="arch-layer reveal" style="max-width:720px;">
         <div class="arch-layer-label">llmkit-protocols</div>
-        <div class="arch-layer-desc">协议编解码 · 请求/响应序列化</div>
+        <div class="arch-layer-desc" data-i18n="arch.proto.desc">协议编解码 · 请求/响应序列化</div>
         <div class="modules">
           <span class="arch-module proto">OpenAiCodec</span>
           <span class="arch-module proto">AnthropicCodec</span>
@@ -1167,7 +1345,7 @@ footer {
 
       <div class="arch-layer reveal" style="max-width:780px;">
         <div class="arch-layer-label">llmkit-providers</div>
-        <div class="arch-layer-desc">服务提供者 · 通过 ServiceLoader 自动发现</div>
+        <div class="arch-layer-desc" data-i18n="arch.provider.desc">服务提供者 · 通过 ServiceLoader 自动发现</div>
         <div class="modules">
           <span class="arch-module provider">OpenAI</span>
           <span class="arch-module provider">Anthropic</span>
@@ -1186,8 +1364,8 @@ footer {
 <section id="providers">
   <div class="section-inner">
     <div class="section-label reveal">Providers</div>
-    <h2 class="section-title reveal">多模型，一站接入</h2>
-    <p class="section-desc reveal">统一 API 覆盖主流 LLM 提供商，无缝切换。</p>
+    <h2 class="section-title reveal" data-i18n="providers.title">多模型，一站接入</h2>
+    <p class="section-desc reveal" data-i18n="providers.desc">统一 API 覆盖主流 LLM 提供商，无缝切换。</p>
 
     <div class="providers-grid">
       <div class="provider-card reveal">
@@ -1233,15 +1411,15 @@ footer {
 <section id="api">
   <div class="section-inner">
     <div class="section-label reveal">API</div>
-    <h2 class="section-title reveal">简洁优雅的 API 设计</h2>
-    <p class="section-desc reveal">直觉式的 API，让你专注于业务逻辑而非基础设施。</p>
+    <h2 class="section-title reveal" data-i18n="api.title">简洁优雅的 API 设计</h2>
+    <p class="section-desc reveal" data-i18n="api.desc">直觉式的 API，让你专注于业务逻辑而非基础设施。</p>
 
     <div class="api-grid">
       <!-- Sync Chat -->
       <div class="api-item reveal">
         <div class="api-item-header">
           <div class="api-item-num">1</div>
-          <div class="api-item-title">同步对话</div>
+          <div class="api-item-title" data-i18n="api.sync.title">同步对话</div>
         </div>
         <div class="api-item-body">
           <div class="code-block">
@@ -1267,7 +1445,7 @@ footer {
       <div class="api-item reveal">
         <div class="api-item-header">
           <div class="api-item-num">2</div>
-          <div class="api-item-title">流式输出</div>
+          <div class="api-item-title" data-i18n="api.stream.title">流式输出</div>
         </div>
         <div class="api-item-body">
           <div class="code-block">
@@ -1294,7 +1472,7 @@ footer {
       <div class="api-item reveal">
         <div class="api-item-header">
           <div class="api-item-num">3</div>
-          <div class="api-item-title">函数调用 (Tool Calling)</div>
+          <div class="api-item-title" data-i18n="api.tool.title">函数调用 (Tool Calling)</div>
         </div>
         <div class="api-item-body">
           <div class="code-block">
@@ -1323,7 +1501,7 @@ footer {
       <div class="api-item reveal">
         <div class="api-item-header">
           <div class="api-item-num">4</div>
-          <div class="api-item-title">重试策略与高级配置</div>
+          <div class="api-item-title" data-i18n="api.retry.title">重试策略与高级配置</div>
         </div>
         <div class="api-item-body">
           <div class="code-block">
@@ -1364,6 +1542,222 @@ footer {
 </footer>
 
 <script>
+// ── i18n ──
+const i18n = {
+  zh: {
+    'nav.features': '核心定位',
+    'nav.quickstart': '快速开始',
+    'nav.architecture': '架构',
+    'nav.providers': '模型',
+    'nav.api': 'API',
+    'hero.subtitle': 'Java LLM 客户端的终极选择',
+    'hero.tagline': '轻量 · 零依赖 · 多模型',
+    'hero.cta1': '快速开始',
+    'features.title': '为什么选择 LLMKit',
+    'features.desc': '做一件事，做到极致。LLMKit 专注于为 Java 开发者提供最轻量的 LLM 调用体验。',
+    'features.zeroDep.title': '零外部依赖',
+    'features.zeroDep.desc': '不依赖 Jackson、Gson、OkHttp 等任何第三方库，仅使用 JDK 标准 API。没有依赖冲突，没有版本地狱。',
+    'features.jdk8.title': 'JDK 8+',
+    'features.jdk8.desc': '兼容 JDK 8，而 Spring AI 和 Langchain4j 需要 JDK 17+。无论你的项目跑在什么环境，都能直接使用。',
+    'features.multi.title': '多模型统一 API',
+    'features.multi.desc': '支持多个主流 LLM 提供商，一套 API 切换自如。只需改一行配置，即可在 OpenAI、Anthropic、DeepSeek 等模型间无缝切换。',
+    'features.light.title': '极致轻量',
+    'features.light.desc': '核心 JAR 不到 200KB，启动即用。没有冗余抽象，没有框架绑定，就是一个纯粹的 LLM 客户端。',
+    'quickstart.title': '三行代码，即刻开始',
+    'quickstart.desc': '添加依赖，初始化客户端，开始对话。就是这么简单。',
+    'quickstart.step1': '1. 添加 Maven 依赖',
+    'quickstart.step2': '2. 编写代码',
+    'quickstart.step3': '3. 切换到其他模型',
+    'arch.title': '清晰的分层架构',
+    'arch.desc': '模块化设计，职责分明。从 API 层到 Provider 层，每一层都可以独立替换和扩展。',
+    'arch.api.desc': '接口 + 模型，零依赖 · 包名: io.llmkit',
+    'arch.core.desc': 'HTTP 客户端 · SSE 解析 · JSON 读写 · 重试策略',
+    'arch.proto.desc': '协议编解码 · 请求/响应序列化',
+    'arch.provider.desc': '服务提供者 · 通过 ServiceLoader 自动发现',
+    'providers.title': '多模型，一站接入',
+    'providers.desc': '统一 API 覆盖主流 LLM 提供商，无缝切换。',
+    'api.title': '简洁优雅的 API 设计',
+    'api.desc': '直觉式的 API，让你专注于业务逻辑而非基础设施。',
+    'api.sync.title': '同步对话',
+    'api.stream.title': '流式输出',
+    'api.tool.title': '函数调用 (Tool Calling)',
+    'api.retry.title': '重试策略与高级配置',
+    'copy': '复制',
+    'copied': '已复制'
+  },
+  en: {
+    'nav.features': 'Features',
+    'nav.quickstart': 'Quickstart',
+    'nav.architecture': 'Architecture',
+    'nav.providers': 'Providers',
+    'nav.api': 'API',
+    'hero.subtitle': 'The ultimate Java LLM client',
+    'hero.tagline': 'Lightweight · Zero Dependency · Multi-Model',
+    'hero.cta1': 'Get Started',
+    'features.title': 'Why LLMKit',
+    'features.desc': 'Do one thing, do it best. LLMKit is the lightest way to call LLM APIs from Java.',
+    'features.zeroDep.title': 'Zero External Dependencies',
+    'features.zeroDep.desc': 'No Jackson, Gson, OkHttp, or any third-party library. Only JDK standard APIs. No dependency conflicts, no version hell.',
+    'features.jdk8.title': 'JDK 8+',
+    'features.jdk8.desc': 'Compatible with JDK 8, while Spring AI and Langchain4j require JDK 17+. Works in any Java environment.',
+    'features.multi.title': 'Unified Multi-Model API',
+    'features.multi.desc': 'Support for multiple LLM providers with a single API. Switch between OpenAI, Anthropic, DeepSeek, and more with one line of config.',
+    'features.light.title': 'Ultra Lightweight',
+    'features.light.desc': 'Core JAR under 200KB, ready to use. No redundant abstractions, no framework bindings — just a pure LLM client.',
+    'quickstart.title': 'Three lines to get started',
+    'quickstart.desc': 'Add a dependency, create a client, start chatting. It\'s that simple.',
+    'quickstart.step1': '1. Add Maven Dependency',
+    'quickstart.step2': '2. Write Your Code',
+    'quickstart.step3': '3. Switch Provider',
+    'arch.title': 'Clean Layered Architecture',
+    'arch.desc': 'Modular design with clear separation of concerns. Each layer from API to Provider can be independently replaced and extended.',
+    'arch.api.desc': 'Interfaces + Models, Zero Dependency · Package: io.llmkit',
+    'arch.core.desc': 'HTTP Client · SSE Parser · JSON I/O · Retry Policy',
+    'arch.proto.desc': 'Protocol Codec · Request/Response Serialization',
+    'arch.provider.desc': 'Service Providers · Auto-discovered via ServiceLoader',
+    'providers.title': 'Multiple Models, One API',
+    'providers.desc': 'Unified API covering major LLM providers. Seamless switching.',
+    'api.title': 'Elegant API Design',
+    'api.desc': 'Intuitive APIs that let you focus on business logic, not infrastructure.',
+    'api.sync.title': 'Synchronous Chat',
+    'api.stream.title': 'Streaming Output',
+    'api.tool.title': 'Tool Calling',
+    'api.retry.title': 'Retry Policy & Advanced Config',
+    'copy': 'Copy',
+    'copied': 'Copied'
+  },
+  ja: {
+    'nav.features': '特徴',
+    'nav.quickstart': 'クイックスタート',
+    'nav.architecture': 'アーキテクチャ',
+    'nav.providers': 'プロバイダー',
+    'nav.api': 'API',
+    'hero.subtitle': '究極の Java LLM クライアント',
+    'hero.tagline': '軽量 · ゼロ依存 · マルチモデル',
+    'hero.cta1': 'はじめる',
+    'features.title': 'LLMKit を選ぶ理由',
+    'features.desc': '一つのことを、極める。LLMKit は Java 開発者に最も軽量な LLM 呼び出し体験を提供します。',
+    'features.zeroDep.title': 'ゼロ外部依存',
+    'features.zeroDep.desc': 'Jackson、Gson、OkHttp などのサードパーティライブラリに依存しません。JDK 標準 API のみを使用。依存関係の競合やバージョンヘルはありません。',
+    'features.jdk8.title': 'JDK 8+',
+    'features.jdk8.desc': 'JDK 8 に対応。Spring AI や Langchain4j は JDK 17+ が必要ですが、あらゆる Java 環境でそのまま利用できます。',
+    'features.multi.title': 'マルチモデル統合 API',
+    'features.multi.desc': '複数の主要 LLM プロバイダーを単一の API でサポート。設定を 1 行変更するだけで、OpenAI、Anthropic、DeepSeek などにシームレスに切り替えられます。',
+    'features.light.title': '超軽量',
+    'features.light.desc': 'コア JAR は 200KB 未満、すぐに使えます。冗長な抽象化やフレームワークの依存はなく、純粋な LLM クライアントです。',
+    'quickstart.title': '3 行で始める',
+    'quickstart.desc': '依存関係を追加し、クライアントを作成し、チャットを開始。それだけです。',
+    'quickstart.step1': '1. Maven 依存関係を追加',
+    'quickstart.step2': '2. コードを書く',
+    'quickstart.step3': '3. プロバイダーを切り替え',
+    'arch.title': '明快な階層アーキテクチャ',
+    'arch.desc': 'モジュラー設計で責任が明確に分離されています。API 層からプロバイダー層まで、各層を独立して置き換え・拡張できます。',
+    'arch.api.desc': 'インターフェース + モデル、ゼロ依存 · パッケージ: io.llmkit',
+    'arch.core.desc': 'HTTP クライアント · SSE パーサー · JSON 読み書き · リトライポリシー',
+    'arch.proto.desc': 'プロトコルコーデック · リクエスト/レスポンスシリアライズ',
+    'arch.provider.desc': 'サービスプロバイダー · ServiceLoader で自動検出',
+    'providers.title': 'マルチモデル、ワン API',
+    'providers.desc': '主要な LLM プロバイダーを統一 API でカバー。シームレスな切り替え。',
+    'api.title': '洗練された API デザイン',
+    'api.desc': '直感的な API で、インフラではなくビジネスロジックに集中できます。',
+    'api.sync.title': '同期チャット',
+    'api.stream.title': 'ストリーミング出力',
+    'api.tool.title': 'ツール呼び出し (Tool Calling)',
+    'api.retry.title': 'リトライポリシーと詳細設定',
+    'copy': 'コピー',
+    'copied': 'コピー済み'
+  },
+  ko: {
+    'nav.features': '핵심 기능',
+    'nav.quickstart': '빠른 시작',
+    'nav.architecture': '아키텍처',
+    'nav.providers': '제공자',
+    'nav.api': 'API',
+    'hero.subtitle': '궁극의 Java LLM 클라이언트',
+    'hero.tagline': '가벼움 · 종속성 없음 · 멀티 모델',
+    'hero.cta1': '시작하기',
+    'features.title': 'LLMKit을 선택하는 이유',
+    'features.desc': '하나에 집중, 최고로 달성. LLMKit은 Java 개발자에게 가장 가벼운 LLM 호출 경험을 제공합니다.',
+    'features.zeroDep.title': '외부 종속성 없음',
+    'features.zeroDep.desc': 'Jackson, Gson, OkHttp 등 타사 라이브러리 없이 JDK 표준 API만 사용. 종속성 충돌이나 버전 문제가 없습니다.',
+    'features.jdk8.title': 'JDK 8+',
+    'features.jdk8.desc': 'JDK 8 호환. Spring AI와 Langchain4j는 JDK 17+가 필요하지만, 어떤 Java 환경에서도 바로 사용할 수 있습니다.',
+    'features.multi.title': '멀티 모델 통합 API',
+    'features.multi.desc': '여러 주요 LLM 제공자를 단일 API로 지원. 설정 한 줄만 변경하면 OpenAI, Anthropic, DeepSeek 등으로 원활하게 전환할 수 있습니다.',
+    'features.light.title': '초경량',
+    'features.light.desc': '코어 JAR 200KB 미만, 바로 사용 가능. 불필요한 추상화나 프레임워크 종속 없이 순수 LLM 클라이언트입니다.',
+    'quickstart.title': '3줄이면 시작 완료',
+    'quickstart.desc': '의존성을 추가하고, 클라이언트를 만들고, 대화를 시작하세요. 그게 전부입니다.',
+    'quickstart.step1': '1. Maven 의존성 추가',
+    'quickstart.step2': '2. 코드 작성',
+    'quickstart.step3': '3. 제공자 전환',
+    'arch.title': '명확한 계층형 아키텍처',
+    'arch.desc': '모듈식 설계로 책임이 명확히 분리됩니다. API 레이어부터 제공자 레이어까지 각 레이어를 독립적으로 교체하고 확장할 수 있습니다.',
+    'arch.api.desc': '인터페이스 + 모델, 종속성 없음 · 패키지: io.llmkit',
+    'arch.core.desc': 'HTTP 클라이언트 · SSE 파서 · JSON 입출력 · 재시도 정책',
+    'arch.proto.desc': '프로토콜 코덱 · 요청/응답 직렬화',
+    'arch.provider.desc': '서비스 제공자 · ServiceLoader로 자동 검색',
+    'providers.title': '멀티 모델, 원 API',
+    'providers.desc': '주요 LLM 제공자를 통합 API로 커버. 원활한 전환.',
+    'api.title': '우아한 API 디자인',
+    'api.desc': '직관적인 API로 인프라가 아닌 비즈니스 로직에 집중할 수 있습니다.',
+    'api.sync.title': '동기 대화',
+    'api.stream.title': '스트리밍 출력',
+    'api.tool.title': '함수 호출 (Tool Calling)',
+    'api.retry.title': '재시도 정책 및 고급 설정',
+    'copy': '복사',
+    'copied': '복사됨'
+  }
+};
+
+const pageTitles = {
+  zh: 'LLMKit — Java LLM 客户端的终极选择',
+  en: 'LLMKit — The Ultimate Java LLM Client',
+  ja: 'LLMKit — 究極の Java LLM クライアント',
+  ko: 'LLMKit — 궁극의 Java LLM 클라이언트'
+};
+
+const langCodes = { zh: 'zh-CN', en: 'en', ja: 'ja', ko: 'ko' };
+
+let currentLang = 'zh';
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  const dict = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+  document.title = pageTitles[lang] || pageTitles.en;
+  document.documentElement.lang = langCodes[lang] || 'zh-CN';
+  document.querySelectorAll('#langMenu button[data-lang]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+const savedLang = localStorage.getItem('lang') || 'zh';
+applyLanguage(savedLang);
+
+const langBtn = document.getElementById('langBtn');
+const langMenu = document.getElementById('langMenu');
+
+langBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  langMenu.classList.toggle('open');
+});
+
+document.querySelectorAll('#langMenu button[data-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.dataset.lang;
+    applyLanguage(lang);
+    localStorage.setItem('lang', lang);
+    langMenu.classList.remove('open');
+  });
+});
+
+document.addEventListener('click', () => langMenu.classList.remove('open'));
+langMenu.addEventListener('click', (e) => e.stopPropagation());
+
 // ── Theme ──
 const html = document.documentElement;
 const themeToggle = document.getElementById('themeToggle');
@@ -1427,11 +1821,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 function copyCode(btn) {
   const codeBody = btn.closest('.code-block').querySelector('pre');
   const text = codeBody.textContent;
+  const dict = i18n[currentLang];
   navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '已复制';
+    btn.textContent = dict.copied;
     btn.classList.add('copied');
     setTimeout(() => {
-      btn.innerHTML = '复制';
+      btn.textContent = dict.copy;
       btn.classList.remove('copied');
     }, 2000);
   });
