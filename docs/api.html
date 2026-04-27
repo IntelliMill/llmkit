@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Reference — LLMKit</title>
+<meta name="description" content="LLMKit API Reference — Java LLM 客户端库完整接口文档。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-tertiary: #86868b;
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.12);
+  --card-bg: rgba(255,255,255,0.72);
+  --card-border: rgba(0,0,0,0.06);
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.04), 0 0 1px rgba(0,0,0,0.08);
+  --code-bg: #1e1e2e;
+  --code-text: #cdd6f4;
+  --gradient-start: #667eea;
+  --gradient-end: #764ba2;
+  --nav-bg: rgba(250,250,250,0.72);
+  --section-alt: #f5f5f7;
+  --tag-bg: rgba(0,113,227,0.08);
+  --tag-text: #0071e3;
+  --glow: rgba(102,126,234,0.15);
+  --sidebar-width: 260px;
+  --sidebar-bg: rgba(255,255,255,0.88);
+  --sidebar-border: rgba(0,0,0,0.06);
+  --table-header-bg: rgba(0,113,227,0.04);
+  --method-tag-bg: rgba(102,126,234,0.1);
+  --method-tag-text: #667eea;
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --bg-elevated: #1c1c1e;
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --text-tertiary: #6e6e73;
+  --accent: #2997ff;
+  --accent-hover: #4db2ff;
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.12);
+  --card-bg: rgba(28,28,30,0.72);
+  --card-border: rgba(255,255,255,0.06);
+  --card-shadow: 0 2px 20px rgba(0,0,0,0.3), 0 0 1px rgba(255,255,255,0.05);
+  --code-bg: #11111b;
+  --code-text: #cdd6f4;
+  --nav-bg: rgba(0,0,0,0.72);
+  --section-alt: #0a0a0a;
+  --tag-bg: rgba(41,151,255,0.1);
+  --tag-text: #2997ff;
+  --glow: rgba(102,126,234,0.1);
+  --sidebar-bg: rgba(14,14,16,0.92);
+  --sidebar-border: rgba(255,255,255,0.06);
+  --table-header-bg: rgba(41,151,255,0.06);
+  --method-tag-bg: rgba(102,126,234,0.12);
+  --method-tag-text: #8b9cf7;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top Navigation ── */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 52px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+}
+
+.top-nav .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.top-nav .brand svg { flex-shrink: 0; }
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.nav-links a:hover { color: var(--text-primary); background: var(--tag-bg); }
+.nav-links a.active { color: var(--accent); background: var(--tag-bg); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.lang-switcher { position: relative; }
+
+.lang-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.2s;
+}
+.lang-btn:hover { border-color: var(--accent); }
+.lang-btn svg { width: 16px; height: 16px; }
+
+.lang-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+  z-index: 100;
+  min-width: 120px;
+}
+.lang-menu.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.lang-menu button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 10px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.lang-menu button:hover { background: var(--tag-bg); color: var(--text-primary); }
+.lang-menu button .check {
+  display: inline-flex;
+  width: 14px; height: 14px;
+}
+.lang-menu button .check svg { opacity: 0; transition: opacity 0.15s; }
+.lang-menu button.active .check svg { opacity: 1; }
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.2s;
+}
+.theme-toggle:hover { border-color: var(--accent); }
+.theme-toggle svg { width: 16px; height: 16px; }
+
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  align-items: center;
+  transition: border-color 0.2s;
+}
+.sidebar-toggle:hover { border-color: var(--accent); }
+.sidebar-toggle svg { width: 18px; height: 18px; }
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed;
+  top: 52px;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  padding: 16px 0;
+  z-index: 900;
+  transition: transform 0.25s ease;
+}
+
+.sidebar-section {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.sidebar-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  padding: 0 8px 6px;
+}
+
+.sidebar-section a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sidebar-section a:hover {
+  color: var(--text-primary);
+  background: var(--tag-bg);
+}
+
+.sidebar-section a.active {
+  color: var(--accent);
+  background: var(--tag-bg);
+}
+
+.sidebar-section a .tag {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-section a .tag.if { background: var(--method-tag-bg); color: var(--method-tag-text); }
+.sidebar-section a .tag.cls { background: rgba(52,199,89,0.1); color: #34c759; }
+.sidebar-section a .tag.enum { background: rgba(255,149,0,0.1); color: #ff9500; }
+
+/* ── Main Content ── */
+.main-content {
+  margin-left: var(--sidebar-width);
+  padding: 72px 40px 80px;
+  max-width: 900px;
+}
+
+.page-header {
+  margin-bottom: 48px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ── API Section ── */
+.api-section {
+  margin-bottom: 48px;
+  scroll-margin-top: 72px;
+}
+
+.api-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.api-section-header .badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.api-section-header .badge.interface { background: var(--method-tag-bg); color: var(--method-tag-text); }
+.api-section-header .badge.class { background: rgba(52,199,89,0.1); color: #34c759; }
+.api-section-header .badge.enum { background: rgba(255,149,0,0.1); color: #ff9500; }
+
+.api-section-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.api-section-header .pkg {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.api-section > .desc {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* ── Method Table ── */
+.method-group {
+  margin-bottom: 24px;
+}
+
+.method-group-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.api-table th {
+  background: var(--table-header-bg);
+  text-align: left;
+  padding: 8px 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.api-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+.api-table tr:last-child td { border-bottom: none; }
+.api-table tr:hover td { background: var(--tag-bg); }
+
+.api-table .type {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--method-tag-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.api-table .field {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.api-table .default-val {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+/* ── Code Block ── */
+.code-block {
+  background: var(--code-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 12px 0 20px;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.code-lang {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.copy-btn {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.copy-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); }
+
+.code-body {
+  padding: 14px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-body pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--code-text);
+  white-space: pre;
+  margin: 0;
+}
+
+.code-body .kw { color: #cba6f7; }
+.code-body .type { color: #89b4fa; }
+.code-body .method { color: #a6e3a1; }
+.code-body .str { color: #a6e3a1; }
+.code-body .num { color: #fab387; }
+.code-body .comment { color: #6c7086; font-style: italic; }
+.code-body .param { color: #f9e2af; }
+
+/* ── Nested Class Card ── */
+.nested-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0 20px;
+}
+
+.nested-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 72px 24px 80px; }
+  .sidebar-toggle { display: flex; }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .main-content { padding: 64px 16px 60px; }
+  .page-header h1 { font-size: 22px; }
+  .api-section-header h2 { font-size: 18px; }
+  .api-table { font-size: 12px; }
+  .api-table th, .api-table td { padding: 6px 8px; }
+}
+
+@media (max-width: 480px) {
+  .top-nav { padding: 0 12px; }
+  .top-nav .brand span { display: none; }
+  .main-content { padding: 56px 12px 48px; }
+}
+
+/* ── Scrollbar ── */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+.code-body::-webkit-scrollbar { height: 4px; }
+.code-body::-webkit-scrollbar-track { background: transparent; }
+.code-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* ── Overlay for mobile sidebar ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 850;
+}
+.sidebar-overlay.open { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ── Top Navigation ── -->
+<nav class="top-nav">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <a href="index.html" class="brand">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+    <span>LLMKit</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+    <li><a href="api.html" class="active" data-i18n="nav.api">API</a></li>
+    <li><a href="https://github.com/IntelliMill/llmkit" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn" id="langBtn" aria-label="Language">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
+      <div class="lang-menu" id="langMenu">
+        <button data-lang="zh"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>中文</button>
+        <button data-lang="en"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>English</button>
+        <button data-lang="ja"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>日本語</button>
+        <button data-lang="ko"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 8 6.5 11.5 13 4.5"/></svg></span>한국어</button>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="icon-sun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+      <span class="icon-moon" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+    </button>
+  </div>
+</nav>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-section-title" data-i18n="sidebar.core">核心接口</div>
+    <a href="#LlmKit"><span class="tag cls">C</span> LlmKit</a>
+    <a href="#LlmClient"><span class="tag if">I</span> LlmClient</a>
+    <a href="#LlmClientBuilder"><span class="tag if">I</span> LlmClientBuilder</a>
+    <a href="#StreamListener"><span class="tag if">I</span> StreamListener</a>
+    <a href="#RetryPolicy"><span class="tag cls">C</span> RetryPolicy</a>
+    <a href="#Providers"><span class="tag cls">C</span> Providers</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title" data-i18n="sidebar.models">请求 / 响应模型</div>
+    <a href="#ChatRequest"><span class="tag cls">C</span> ChatRequest</a>
+    <a href="#ChatResponse"><span class="tag cls">C</span> ChatResponse</a>
+    <a href="#ChatMessage"><span class="tag cls">C</span> ChatMessage</a>
+    <a href="#ChatChunk"><span class="tag cls">C</span> ChatChunk</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title" data-i18n="sidebar.tools">工具调用</div>
+    <a href="#ToolDefinition"><span class="tag cls">C</span> ToolDefinition</a>
+    <a href="#ToolCall"><span class="tag cls">C</span> ToolCall</a>
+    <a href="#ToolResult"><span class="tag cls">C</span> ToolResult</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title" data-i18n="sidebar.aux">辅助类</div>
+    <a href="#Usage"><span class="tag cls">C</span> Usage</a>
+    <a href="#ChoiceLogprobs"><span class="tag cls">C</span> ChoiceLogprobs</a>
+  </div>
+</aside>
+
+<!-- ── Main Content ── -->
+<div class="main-content">
+
+<div class="page-header">
+  <h1 data-i18n="page.title">API Reference</h1>
+  <p data-i18n="page.desc">LLMKit 公开 API 的完整参考文档。所有类位于 io.llmkit 或 io.llmkit.model 包下。</p>
+</div>
+
+<!-- ═══════════════════ LlmKit ═══════════════════ -->
+<section id="LlmKit" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>LlmKit</h2>
+    <span class="pkg">io.llmkit</span>
+  </div>
+  <p class="desc" data-i18n="llmkit.desc">入口门面类，通过 Java ServiceLoader (SPI) 自动发现 classpath 上的提供商模块，提供创建客户端的静态工厂方法。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.staticMethods">静态方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.return">返回值</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="field">create(String apiKey)</td>
+          <td class="type">LlmClient</td>
+          <td data-i18n="llmkit.create.desc">使用 API Key 创建默认客户端（使用第一个可用提供商）</td>
+        </tr>
+        <tr>
+          <td class="field">builder(String providerName)</td>
+          <td class="type">LlmClientBuilder</td>
+          <td data-i18n="llmkit.builder.desc">为指定提供商创建构建器，可链式配置参数</td>
+        </tr>
+        <tr>
+          <td class="field">providers()</td>
+          <td class="type">List&lt;String&gt;</td>
+          <td data-i18n="llmkit.providers.desc">列出所有已注册的提供商名称</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="comment">// 快速创建 — 使用默认提供商</span>
+<span class="type">LlmClient</span> client = <span class="type">LlmKit</span>.<span class="method">create</span>(<span class="str">"sk-xxx"</span>);
+
+<span class="comment">// 指定提供商 + 完整配置</span>
+<span class="type">LlmClient</span> client = <span class="type">LlmKit</span>
+    .<span class="method">builder</span>(<span class="type">Providers</span>.<span class="method">OPENAI</span>)
+    .<span class="method">apiKey</span>(<span class="str">"sk-xxx"</span>)
+    .<span class="method">model</span>(<span class="str">"gpt-4o"</span>)
+    .<span class="method">build</span>();
+
+<span class="comment">// 查看可用提供商</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="type">LlmKit</span>.<span class="method">providers</span>();
+<span class="comment">// → ["openai", "anthropic", "deepseek", ...]</span></pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LlmClient ═══════════════════ -->
+<section id="LlmClient" class="api-section">
+  <div class="api-section-header">
+    <span class="badge interface" data-i18n="badge.interface">接口</span>
+    <h2>LlmClient</h2>
+    <span class="pkg">io.llmkit</span>
+  </div>
+  <p class="desc" data-i18n="llmclient.desc">核心客户端接口，实现 AutoCloseable。提供同步对话、流式对话和一次性对话三种调用方式。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.methods">方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.return">返回值</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="field">chat(ChatRequest request)</td>
+          <td class="type">ChatResponse</td>
+          <td data-i18n="llmclient.chat.desc">同步对话补全，发送请求并返回完整响应</td>
+        </tr>
+        <tr>
+          <td class="field">chatStream(ChatRequest request, StreamListener listener)</td>
+          <td class="type">void</td>
+          <td data-i18n="llmclient.chatStream.desc">流式对话，通过 StreamListener 回调逐块接收响应</td>
+        </tr>
+        <tr>
+          <td class="field">chat(String message)</td>
+          <td class="type">String</td>
+          <td data-i18n="llmclient.chatSimple.desc">一次性便捷方法，发送单条消息并直接返回文本内容</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="comment">// 一次性对话</span>
+<span class="type">String</span> answer = client.<span class="method">chat</span>(<span class="str">"What is quantum computing?"</span>);
+
+<span class="comment">// 完整请求</span>
+<span class="type">ChatResponse</span> response = client.<span class="method">chat</span>(<span class="type">ChatRequest</span>.<span class="method">builder</span>()
+    .<span class="method">messages</span>(<span class="type">ChatMessage</span>.<span class="method">user</span>(<span class="str">"Hello"</span>))
+    .<span class="method">build</span>());
+<span class="type">System</span>.out.<span class="method">println</span>(response.<span class="method">content</span>());</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LlmClientBuilder ═══════════════════ -->
+<section id="LlmClientBuilder" class="api-section">
+  <div class="api-section-header">
+    <span class="badge interface" data-i18n="badge.interface">接口</span>
+    <h2>LlmClientBuilder</h2>
+    <span class="pkg">io.llmkit</span>
+  </div>
+  <p class="desc" data-i18n="llmbuilder.desc">客户端构建器接口，通过 LlmKit.builder(name) 获取。支持链式调用配置客户端参数。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.builderMethods">构建器方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.param">参数类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="field">apiKey(String)</td>
+          <td class="type">String</td>
+          <td data-i18n="llmbuilder.apiKey.desc">设置 API 密钥（必填）</td>
+        </tr>
+        <tr>
+          <td class="field">model(String)</td>
+          <td class="type">String</td>
+          <td data-i18n="llmbuilder.model.desc">设置模型名称，默认使用提供商的默认模型</td>
+        </tr>
+        <tr>
+          <td class="field">baseUrl(String)</td>
+          <td class="type">String</td>
+          <td data-i18n="llmbuilder.baseUrl.desc">覆盖默认 API 地址，可用于代理或本地模型（如 Ollama）</td>
+        </tr>
+        <tr>
+          <td class="field">timeout(Duration)</td>
+          <td class="type">Duration</td>
+          <td data-i18n="llmbuilder.timeout.desc">设置请求超时时间</td>
+        </tr>
+        <tr>
+          <td class="field">retry(RetryPolicy)</td>
+          <td class="type">RetryPolicy</td>
+          <td data-i18n="llmbuilder.retry.desc">设置重试策略，遇到 429 或 5xx 自动重试</td>
+        </tr>
+        <tr>
+          <td class="field">build()</td>
+          <td class="type">LlmClient</td>
+          <td data-i18n="llmbuilder.build.desc">构建并返回 LlmClient 实例</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="type">LlmClient</span> client = <span class="type">LlmKit</span>
+    .<span class="method">builder</span>(<span class="type">Providers</span>.<span class="method">ANTHROPIC</span>)
+    .<span class="method">apiKey</span>(<span class="str">"sk-ant-xxx"</span>)
+    .<span class="method">model</span>(<span class="str">"claude-sonnet-4-20250514"</span>)
+    .<span class="method">baseUrl</span>(<span class="str">"https://api.anthropic.com"</span>)
+    .<span class="method">timeout</span>(<span class="type">Duration</span>.<span class="method">ofSeconds</span>(<span class="num">60</span>))
+    .<span class="method">retry</span>(<span class="type">RetryPolicy</span>.<span class="method">defaults</span>())
+    .<span class="method">build</span>();</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ StreamListener ═══════════════════ -->
+<section id="StreamListener" class="api-section">
+  <div class="api-section-header">
+    <span class="badge interface" data-i18n="badge.interface">接口</span>
+    <h2>StreamListener</h2>
+    <span class="pkg">io.llmkit</span>
+  </div>
+  <p class="desc" data-i18n="streamlistener.desc">流式响应回调接口，用于 chatStream() 方法中逐块接收模型的输出。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.callbackMethods">回调方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.param">参数</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="field">onChunk(ChatChunk)</td>
+          <td class="type">ChatChunk</td>
+          <td data-i18n="streamlistener.onChunk.desc">每收到一个流式数据块时调用</td>
+        </tr>
+        <tr>
+          <td class="field">onComplete(ChatResponse)</td>
+          <td class="type">ChatResponse</td>
+          <td data-i18n="streamlistener.onComplete.desc">流式输出完成时调用，传入完整响应</td>
+        </tr>
+        <tr>
+          <td class="field">onError(Throwable)</td>
+          <td class="type">Throwable</td>
+          <td data-i18n="streamlistener.onError.desc">发生错误时调用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre>client.<span class="method">chatStream</span>(request, <span class="kw">new</span> <span class="type">StreamListener</span>() {
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> <span class="method">onChunk</span>(<span class="type">ChatChunk</span> chunk) {
+        <span class="type">System</span>.out.<span class="method">print</span>(chunk.<span class="method">delta</span>());
+    }
+
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> <span class="method">onComplete</span>(<span class="type">ChatResponse</span> response) {
+        <span class="type">System</span>.out.<span class="method">println</span>(<span class="str">"\nDone"</span>);
+    }
+
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> <span class="method">onError</span>(<span class="type">Throwable</span> e) {
+        e.<span class="method">printStackTrace</span>();
+    }
+});</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ RetryPolicy ═══════════════════ -->
+<section id="RetryPolicy" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>RetryPolicy</h2>
+    <span class="pkg">io.llmkit</span>
+  </div>
+  <p class="desc" data-i18n="retrypolicy.desc">重试策略配置，用于在遇到 HTTP 429（速率限制）或 5xx（服务端错误）时自动重试。采用指数退避算法。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.default">默认值</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="field">maxRetries</td>
+          <td class="type">int</td>
+          <td class="default-val">3</td>
+          <td data-i18n="retrypolicy.maxRetries.desc">最大重试次数</td>
+        </tr>
+        <tr>
+          <td class="field">initialDelayMs</td>
+          <td class="type">long</td>
+          <td class="default-val">1000</td>
+          <td data-i18n="retrypolicy.initialDelayMs.desc">首次重试前的等待时间（毫秒）</td>
+        </tr>
+        <tr>
+          <td class="field">backoffMultiplier</td>
+          <td class="type">double</td>
+          <td class="default-val">2.0</td>
+          <td data-i18n="retrypolicy.backoffMultiplier.desc">退避倍数，每次重试等待时间乘以此值</td>
+        </tr>
+        <tr>
+          <td class="field">maxDelayMs</td>
+          <td class="type">int</td>
+          <td class="default-val">30000</td>
+          <td data-i18n="retrypolicy.maxDelayMs.desc">最大等待时间上限（毫秒）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.staticMethods">静态方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="field">builder()</td>
+          <td data-i18n="retrypolicy.builder.desc">创建 Builder 实例</td>
+        </tr>
+        <tr>
+          <td class="field">defaults()</td>
+          <td data-i18n="retrypolicy.defaults.desc">返回默认重试策略（3 次重试，1 秒初始延迟，2 倍退避）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="comment">// 使用默认策略</span>
+<span class="type">RetryPolicy</span> policy = <span class="type">RetryPolicy</span>.<span class="method">defaults</span>();
+
+<span class="comment">// 自定义策略</span>
+<span class="type">RetryPolicy</span> policy = <span class="type">RetryPolicy</span>.<span class="method">builder</span>()
+    .<span class="method">maxRetries</span>(<span class="num">5</span>)
+    .<span class="method">initialDelayMs</span>(<span class="num">2000</span>)
+    .<span class="method">backoffMultiplier</span>(<span class="num">2.5</span>)
+    .<span class="method">maxDelayMs</span>(<span class="num">60000</span>)
+    .<span class="method">build</span>();</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ Providers ═══════════════════ -->
+<section id="Providers" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>Providers</h2>
+    <span class="pkg">io.llmkit</span>
+  </div>
+  <p class="desc" data-i18n="providers.desc">内置提供商名称常量，用于 LlmKit.builder(name) 调用时避免硬编码字符串。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.constants">常量</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.constant">常量</th><th data-i18n="col.value">值</th><th data-i18n="col.provider">提供商</th></tr></thead>
+      <tbody>
+        <tr><td class="field">Providers.OPENAI</td><td class="default-val">"openai"</td><td>OpenAI</td></tr>
+        <tr><td class="field">Providers.ANTHROPIC</td><td class="default-val">"anthropic"</td><td>Anthropic</td></tr>
+        <tr><td class="field">Providers.DEEPSEEK</td><td class="default-val">"deepseek"</td><td>DeepSeek</td></tr>
+        <tr><td class="field">Providers.GLM</td><td class="default-val">"glm"</td><td data-i18n="providers.glm">智谱 AI (GLM)</td></tr>
+        <tr><td class="field">Providers.QWEN</td><td class="default-val">"qwen"</td><td data-i18n="providers.qwen">通义千问 (DashScope)</td></tr>
+        <tr><td class="field">Providers.MINIMAX</td><td class="default-val">"minimax"</td><td>MiniMax</td></tr>
+        <tr><td class="field">Providers.KIMI</td><td class="default-val">"kimi"</td><td data-i18n="providers.kimi">Moonshot AI (Kimi)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════ ChatRequest ═══════════════════ -->
+<section id="ChatRequest" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ChatRequest</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="chatrequest.desc">不可变的对话请求模型，通过 Builder 模式构建。包含对话消息、模型参数和工具定义。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">model</td><td class="type">String</td><td data-i18n="chatrequest.model.desc">模型名称，不设置时使用客户端默认模型</td></tr>
+        <tr><td class="field">messages</td><td class="type">List&lt;ChatMessage&gt;</td><td data-i18n="chatrequest.messages.desc">对话消息列表，按顺序排列</td></tr>
+        <tr><td class="field">temperature</td><td class="type">Double</td><td data-i18n="chatrequest.temperature.desc">采样温度，0.0 ~ 2.0，值越高输出越随机</td></tr>
+        <tr><td class="field">maxTokens</td><td class="type">Integer</td><td data-i18n="chatrequest.maxTokens.desc">生成的最大 token 数量</td></tr>
+        <tr><td class="field">tools</td><td class="type">List&lt;ToolDefinition&gt;</td><td data-i18n="chatrequest.tools.desc">可调用的工具/函数定义列表</td></tr>
+        <tr><td class="field">topP</td><td class="type">Double</td><td data-i18n="chatrequest.topP.desc">核采样参数 (nucleus sampling)</td></tr>
+        <tr><td class="field">seed</td><td class="type">Integer</td><td data-i18n="chatrequest.seed.desc">随机种子，用于可复现的输出</td></tr>
+        <tr><td class="field">stop</td><td class="type">List&lt;String&gt;</td><td data-i18n="chatrequest.stop.desc">停止序列列表，模型遇到这些字符串时停止生成</td></tr>
+        <tr><td class="field">logprobs</td><td class="type">Boolean</td><td data-i18n="chatrequest.logprobs.desc">是否返回 token 的对数概率</td></tr>
+        <tr><td class="field">topLogprobs</td><td class="type">Integer</td><td data-i18n="chatrequest.topLogprobs.desc">每个 token 返回的前 N 个对数概率 (0~20)</td></tr>
+        <tr><td class="field">responseFormat</td><td class="type">String</td><td data-i18n="chatrequest.responseFormat.desc">响应格式设置，支持 text、json_object、json_schema</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.factoryMethods">工厂方法（responseFormat）</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">jsonResponseFormat()</td><td data-i18n="chatrequest.jsonRF.desc">设置响应格式为 JSON 对象模式</td></tr>
+        <tr><td class="field">textResponseFormat()</td><td data-i18n="chatrequest.textRF.desc">设置响应格式为纯文本模式</td></tr>
+        <tr><td class="field">schemaResponseFormat(name, jsonSchema)</td><td data-i18n="chatrequest.schemaRF.desc">设置响应格式为 JSON Schema 结构化输出</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="type">ChatRequest</span> request = <span class="type">ChatRequest</span>.<span class="method">builder</span>()
+    .<span class="method">model</span>(<span class="str">"gpt-4o"</span>)
+    .<span class="method">messages</span>(
+        <span class="type">ChatMessage</span>.<span class="method">system</span>(<span class="str">"You are a helpful assistant"</span>),
+        <span class="type">ChatMessage</span>.<span class="method">user</span>(<span class="str">"Explain quantum computing"</span>)
+    )
+    .<span class="method">temperature</span>(<span class="num">0.7</span>)
+    .<span class="method">maxTokens</span>(<span class="num">1024</span>)
+    .<span class="method">responseFormat</span>(<span class="type">ChatRequest</span>.<span class="method">jsonResponseFormat</span>())
+    .<span class="method">build</span>();</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ChatResponse ═══════════════════ -->
+<section id="ChatResponse" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ChatResponse</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="chatresponse.desc">不可变的对话响应模型，包含一个或多个 Choice、Token 用量和模型信息。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">id</td><td class="type">String</td><td data-i18n="chatresponse.id.desc">响应唯一标识</td></tr>
+        <tr><td class="field">choices</td><td class="type">List&lt;Choice&gt;</td><td data-i18n="chatresponse.choices.desc">生成的回复选项列表</td></tr>
+        <tr><td class="field">usage</td><td class="type">Usage</td><td data-i18n="chatresponse.usage.desc">Token 用量统计</td></tr>
+        <tr><td class="field">model</td><td class="type">String</td><td data-i18n="chatresponse.model.desc">实际使用的模型名称</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.convenienceMethods">便捷方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.return">返回值</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">content()</td><td class="type">String</td><td data-i18n="chatresponse.content.desc">获取第一个 Choice 的文本内容，无内容时返回 null</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nested-card">
+    <h4>Choice <span class="badge class" data-i18n="badge.nested">嵌套类</span></h4>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">index</td><td class="type">int</td><td data-i18n="chatresponse.choice.index.desc">选项索引</td></tr>
+        <tr><td class="field">message</td><td class="type">ChatMessage</td><td data-i18n="chatresponse.choice.message.desc">生成的消息（包含内容或工具调用）</td></tr>
+        <tr><td class="field">finishReason</td><td class="type">String</td><td data-i18n="chatresponse.choice.finishReason.desc">结束原因：stop、length、tool_calls</td></tr>
+        <tr><td class="field">logprobs</td><td class="type">ChoiceLogprobs</td><td data-i18n="chatresponse.choice.logprobs.desc">Token 对数概率信息</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════ ChatMessage ═══════════════════ -->
+<section id="ChatMessage" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ChatMessage</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="chatmessage.desc">不可变的对话消息模型，每条消息包含角色、内容，以及可选的工具调用信息。</p>
+
+  <div class="nested-card" style="margin-bottom: 20px;">
+    <h4>Role <span class="badge enum" data-i18n="badge.enum">枚举</span></h4>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.value">值</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">SYSTEM</td><td data-i18n="chatmessage.role.system.desc">系统指令，设定模型行为</td></tr>
+        <tr><td class="field">USER</td><td data-i18n="chatmessage.role.user.desc">用户输入的消息</td></tr>
+        <tr><td class="field">ASSISTANT</td><td data-i18n="chatmessage.role.assistant.desc">模型生成的回复</td></tr>
+        <tr><td class="field">TOOL</td><td data-i18n="chatmessage.role.tool.desc">工具执行结果，反馈给模型</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">role</td><td class="type">Role</td><td data-i18n="chatmessage.roleField.desc">消息角色</td></tr>
+        <tr><td class="field">content</td><td class="type">String</td><td data-i18n="chatmessage.content.desc">消息文本内容</td></tr>
+        <tr><td class="field">toolCalls</td><td class="type">List&lt;ToolCall&gt;</td><td data-i18n="chatmessage.toolCalls.desc">模型发起的工具调用列表（仅 ASSISTANT 角色）</td></tr>
+        <tr><td class="field">toolCallId</td><td class="type">String</td><td data-i18n="chatmessage.toolCallId.desc">对应的工具调用 ID（仅 TOOL 角色）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.factoryMethods">工厂方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">system(String content)</td><td data-i18n="chatmessage.system.desc">创建 SYSTEM 角色消息</td></tr>
+        <tr><td class="field">user(String content)</td><td data-i18n="chatmessage.user.desc">创建 USER 角色消息</td></tr>
+        <tr><td class="field">assistant(String content)</td><td data-i18n="chatmessage.assistant.desc">创建 ASSISTANT 角色消息</td></tr>
+        <tr><td class="field">toolResult(String toolCallId, String content)</td><td data-i18n="chatmessage.toolResult.desc">创建 TOOL 角色消息，包含工具调用 ID 和执行结果</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="comment">// 多轮对话</span>
+<span class="type">ChatRequest</span> request = <span class="type">ChatRequest</span>.<span class="method">builder</span>()
+    .<span class="method">messages</span>(
+        <span class="type">ChatMessage</span>.<span class="method">system</span>(<span class="str">"You are a translator"</span>),
+        <span class="type">ChatMessage</span>.<span class="method">user</span>(<span class="str">"Translate to French: Hello"</span>),
+        <span class="type">ChatMessage</span>.<span class="method">assistant</span>(<span class="str">"Bonjour"</span>),
+        <span class="type">ChatMessage</span>.<span class="method">user</span>(<span class="str">"Thank you"</span>)
+    )
+    .<span class="method">build</span>();</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ChatChunk ═══════════════════ -->
+<section id="ChatChunk" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ChatChunk</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="chatchunk.desc">不可变的流式响应数据块，在 StreamListener.onChunk() 回调中使用。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">id</td><td class="type">String</td><td data-i18n="chatchunk.id.desc">响应流唯一标识</td></tr>
+        <tr><td class="field">choices</td><td class="type">List&lt;ChunkChoice&gt;</td><td data-i18n="chatchunk.choices.desc">流式选项列表</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.convenienceMethods">便捷方法</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.method">方法</th><th data-i18n="col.return">返回值</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">delta()</td><td class="type">String</td><td data-i18n="chatchunk.delta.desc">获取第一个 Choice 的增量文本内容</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nested-card">
+    <h4>ChunkChoice <span class="badge class" data-i18n="badge.nested">嵌套类</span></h4>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">index</td><td class="type">int</td><td data-i18n="chatchunk.chunkchoice.index.desc">选项索引</td></tr>
+        <tr><td class="field">delta</td><td class="type">ChatMessage</td><td data-i18n="chatchunk.chunkchoice.delta.desc">增量消息内容</td></tr>
+        <tr><td class="field">finishReason</td><td class="type">String</td><td data-i18n="chatchunk.chunkchoice.finishReason.desc">结束原因，最后一个块为 stop/length/tool_calls</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════ ToolDefinition ═══════════════════ -->
+<section id="ToolDefinition" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ToolDefinition</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="tooldef.desc">工具/函数定义，描述模型可以调用的外部工具。通过 Builder 模式构建。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">name</td><td class="type">String</td><td data-i18n="tooldef.name.desc">工具名称</td></tr>
+        <tr><td class="field">description</td><td class="type">String</td><td data-i18n="tooldef.description.desc">工具功能描述，帮助模型决定何时调用</td></tr>
+        <tr><td class="field">parameters</td><td class="type">String</td><td data-i18n="tooldef.parameters.desc">JSON Schema 格式的参数定义</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="type">ToolDefinition</span> tool = <span class="type">ToolDefinition</span>.<span class="method">builder</span>()
+    .<span class="method">name</span>(<span class="str">"get_weather"</span>)
+    .<span class="method">description</span>(<span class="str">"Get current weather for a location"</span>)
+    .<span class="method">parameters</span>(<span class="str">"{"type":"object"," +
+        ""properties":{" +
+          ""location":{"type":"string","description":"City name"}" +
+        "}," +
+        ""required":["location"]"}</span>)
+    .<span class="method">build</span>();</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ToolCall ═══════════════════ -->
+<section id="ToolCall" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ToolCall</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="toolcall.desc">模型发起的工具调用，包含在 ASSISTANT 角色的 ChatMessage 中。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">id</td><td class="type">String</td><td data-i18n="toolcall.id.desc">工具调用的唯一标识</td></tr>
+        <tr><td class="field">name</td><td class="type">String</td><td data-i18n="toolcall.name.desc">调用的工具名称</td></tr>
+        <tr><td class="field">arguments</td><td class="type">String</td><td data-i18n="toolcall.arguments.desc">模型生成的 JSON 格式调用参数</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════ ToolResult ═══════════════════ -->
+<section id="ToolResult" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ToolResult</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="toolresult.desc">工具执行结果，用于将工具调用结果反馈给模型以继续对话。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">toolCallId</td><td class="type">String</td><td data-i18n="toolresult.toolCallId.desc">对应的工具调用 ID</td></tr>
+        <tr><td class="field">content</td><td class="type">String</td><td data-i18n="toolresult.content.desc">工具执行结果内容</td></tr>
+        <tr><td class="field">isError</td><td class="type">boolean</td><td data-i18n="toolresult.isError.desc">是否为错误结果，默认 false</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><button class="copy-btn" onclick="copyCode(this)" data-i18n="btn.copy">复制</button></div>
+    <div class="code-body"><pre><span class="comment">// 完整的 Tool Calling 流程</span>
+<span class="type">ChatResponse</span> response = client.<span class="method">chat</span>(request);
+
+<span class="kw">if</span> (response.<span class="method">content</span>() == <span class="kw">null</span>) {
+    <span class="type">ToolCall</span> call = response.<span class="method">getChoices</span>().<span class="method">get</span>(<span class="num">0</span>)
+        .<span class="method">getMessage</span>().<span class="method">getToolCalls</span>().<span class="method">get</span>(<span class="num">0</span>);
+
+    <span class="comment">// 执行你的工具函数...</span>
+    <span class="type">String</span> result = <span class="method">executeTool</span>(call.<span class="method">getName</span>(), call.<span class="method">getArguments</span>());
+
+    <span class="comment">// 将结果反馈给模型</span>
+    <span class="type">ChatRequest</span> followUp = <span class="type">ChatRequest</span>.<span class="method">builder</span>()
+        .<span class="method">messages</span>(
+            response.<span class="method">getChoices</span>().<span class="method">get</span>(<span class="num">0</span>).<span class="method">getMessage</span>(),
+            <span class="type">ChatMessage</span>.<span class="method">toolResult</span>(call.<span class="method">getId</span>(), result)
+        )
+        .<span class="method">build</span>();
+
+    <span class="type">ChatResponse</span> finalResp = client.<span class="method">chat</span>(followUp);
+    <span class="type">System</span>.out.<span class="method">println</span>(finalResp.<span class="method">content</span>());
+}</pre></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ Usage ═══════════════════ -->
+<section id="Usage" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>Usage</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="usage.desc">Token 用量统计，包含在 ChatResponse 中。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">promptTokens</td><td class="type">int</td><td data-i18n="usage.promptTokens.desc">输入 prompt 消耗的 token 数</td></tr>
+        <tr><td class="field">completionTokens</td><td class="type">int</td><td data-i18n="usage.completionTokens.desc">生成回复消耗的 token 数</td></tr>
+        <tr><td class="field">totalTokens</td><td class="type">int</td><td data-i18n="usage.totalTokens.desc">总消耗 token 数</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════ ChoiceLogprobs ═══════════════════ -->
+<section id="ChoiceLogprobs" class="api-section">
+  <div class="api-section-header">
+    <span class="badge class" data-i18n="badge.class">类</span>
+    <h2>ChoiceLogprobs</h2>
+    <span class="pkg">io.llmkit.model</span>
+  </div>
+  <p class="desc" data-i18n="choicelogprobs.desc">Token 级别的对数概率信息，需在 ChatRequest 中设置 logprobs=true 开启。</p>
+
+  <div class="method-group">
+    <div class="method-group-title" data-i18n="label.fields">字段</div>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">content</td><td class="type">List&lt;TokenLogprob&gt;</td><td data-i18n="choicelogprobs.content.desc">每个生成 token 的对数概率信息</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nested-card">
+    <h4>TokenLogprob <span class="badge class" data-i18n="badge.nested">嵌套类</span></h4>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">token</td><td class="type">String</td><td data-i18n="tokenlogprob.token.desc">生成的 token 文本</td></tr>
+        <tr><td class="field">logprob</td><td class="type">double</td><td data-i18n="tokenlogprob.logprob.desc">该 token 的对数概率</td></tr>
+        <tr><td class="field">topLogprobs</td><td class="type">List&lt;TopLogprob&gt;</td><td data-i18n="tokenlogprob.topLogprobs.desc">前 N 个候选 token 及其概率</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nested-card">
+    <h4>TopLogprob <span class="badge class" data-i18n="badge.nested">嵌套类</span></h4>
+    <table class="api-table">
+      <thead><tr><th data-i18n="col.field">字段</th><th data-i18n="col.type">类型</th><th data-i18n="col.description">说明</th></tr></thead>
+      <tbody>
+        <tr><td class="field">token</td><td class="type">String</td><td data-i18n="toplogprob.token.desc">候选 token 文本</td></tr>
+        <tr><td class="field">logprob</td><td class="type">double</td><td data-i18n="toplogprob.logprob.desc">该候选 token 的对数概率</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- /main-content -->
+
+<script>
+// ── Copy Code ──
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = btn.getAttribute('data-i18n') === 'btn.copy' ? '已复制' : 'Copied';
+    if (i18n[currentLang] && i18n[currentLang]['btn.copied']) btn.textContent = i18n[currentLang]['btn.copied'];
+    setTimeout(() => {
+      applyBtnText(btn);
+    }, 1500);
+  });
+}
+
+function applyBtnText(btn) {
+  const dict = i18n[currentLang];
+  if (dict && dict['btn.copy']) btn.textContent = dict['btn.copy'];
+}
+
+// ── i18n ──
+const i18n = {
+  zh: {
+    'nav.home': '首页',
+    'nav.api': 'API',
+    'sidebar.core': '核心接口',
+    'sidebar.models': '请求 / 响应模型',
+    'sidebar.tools': '工具调用',
+    'sidebar.aux': '辅助类',
+    'page.title': 'API Reference',
+    'page.desc': 'LLMKit 公开 API 的完整参考文档。所有类位于 io.llmkit 或 io.llmkit.model 包下。',
+    'badge.class': '类',
+    'badge.interface': '接口',
+    'badge.enum': '枚举',
+    'badge.nested': '嵌套类',
+    'label.staticMethods': '静态方法',
+    'label.methods': '方法',
+    'label.builderMethods': '构建器方法',
+    'label.callbackMethods': '回调方法',
+    'label.fields': '字段',
+    'label.factoryMethods': '工厂方法',
+    'label.convenienceMethods': '便捷方法',
+    'label.constants': '常量',
+    'col.method': '方法',
+    'col.return': '返回值',
+    'col.param': '参数类型',
+    'col.description': '说明',
+    'col.field': '字段',
+    'col.type': '类型',
+    'col.default': '默认值',
+    'col.constant': '常量',
+    'col.value': '值',
+    'col.provider': '提供商',
+    'btn.copy': '复制',
+    'btn.copied': '已复制',
+    'llmkit.desc': '入口门面类，通过 Java ServiceLoader (SPI) 自动发现 classpath 上的提供商模块，提供创建客户端的静态工厂方法。',
+    'llmkit.create.desc': '使用 API Key 创建默认客户端（使用第一个可用提供商）',
+    'llmkit.builder.desc': '为指定提供商创建构建器，可链式配置参数',
+    'llmkit.providers.desc': '列出所有已注册的提供商名称',
+    'llmclient.desc': '核心客户端接口，实现 AutoCloseable。提供同步对话、流式对话和一次性对话三种调用方式。',
+    'llmclient.chat.desc': '同步对话补全，发送请求并返回完整响应',
+    'llmclient.chatStream.desc': '流式对话，通过 StreamListener 回调逐块接收响应',
+    'llmclient.chatSimple.desc': '一次性便捷方法，发送单条消息并直接返回文本内容',
+    'llmbuilder.desc': '客户端构建器接口，通过 LlmKit.builder(name) 获取。支持链式调用配置客户端参数。',
+    'llmbuilder.apiKey.desc': '设置 API 密钥（必填）',
+    'llmbuilder.model.desc': '设置模型名称，默认使用提供商的默认模型',
+    'llmbuilder.baseUrl.desc': '覆盖默认 API 地址，可用于代理或本地模型（如 Ollama）',
+    'llmbuilder.timeout.desc': '设置请求超时时间',
+    'llmbuilder.retry.desc': '设置重试策略，遇到 429 或 5xx 自动重试',
+    'llmbuilder.build.desc': '构建并返回 LlmClient 实例',
+    'streamlistener.desc': '流式响应回调接口，用于 chatStream() 方法中逐块接收模型的输出。',
+    'streamlistener.onChunk.desc': '每收到一个流式数据块时调用',
+    'streamlistener.onComplete.desc': '流式输出完成时调用，传入完整响应',
+    'streamlistener.onError.desc': '发生错误时调用',
+    'retrypolicy.desc': '重试策略配置，用于在遇到 HTTP 429（速率限制）或 5xx（服务端错误）时自动重试。采用指数退避算法。',
+    'retrypolicy.maxRetries.desc': '最大重试次数',
+    'retrypolicy.initialDelayMs.desc': '首次重试前的等待时间（毫秒）',
+    'retrypolicy.backoffMultiplier.desc': '退避倍数，每次重试等待时间乘以此值',
+    'retrypolicy.maxDelayMs.desc': '最大等待时间上限（毫秒）',
+    'retrypolicy.builder.desc': '创建 Builder 实例',
+    'retrypolicy.defaults.desc': '返回默认重试策略（3 次重试，1 秒初始延迟，2 倍退避）',
+    'providers.desc': '内置提供商名称常量，用于 LlmKit.builder(name) 调用时避免硬编码字符串。',
+    'providers.glm': '智谱 AI (GLM)',
+    'providers.qwen': '通义千问 (DashScope)',
+    'providers.kimi': 'Moonshot AI (Kimi)',
+    'chatrequest.desc': '不可变的对话请求模型，通过 Builder 模式构建。包含对话消息、模型参数和工具定义。',
+    'chatrequest.model.desc': '模型名称，不设置时使用客户端默认模型',
+    'chatrequest.messages.desc': '对话消息列表，按顺序排列',
+    'chatrequest.temperature.desc': '采样温度，0.0 ~ 2.0，值越高输出越随机',
+    'chatrequest.maxTokens.desc': '生成的最大 token 数量',
+    'chatrequest.tools.desc': '可调用的工具/函数定义列表',
+    'chatrequest.topP.desc': '核采样参数 (nucleus sampling)',
+    'chatrequest.seed.desc': '随机种子，用于可复现的输出',
+    'chatrequest.stop.desc': '停止序列列表，模型遇到这些字符串时停止生成',
+    'chatrequest.logprobs.desc': '是否返回 token 的对数概率',
+    'chatrequest.topLogprobs.desc': '每个 token 返回的前 N 个对数概率 (0~20)',
+    'chatrequest.responseFormat.desc': '响应格式设置，支持 text、json_object、json_schema',
+    'chatrequest.jsonRF.desc': '设置响应格式为 JSON 对象模式',
+    'chatrequest.textRF.desc': '设置响应格式为纯文本模式',
+    'chatrequest.schemaRF.desc': '设置响应格式为 JSON Schema 结构化输出',
+    'chatresponse.desc': '不可变的对话响应模型，包含一个或多个 Choice、Token 用量和模型信息。',
+    'chatresponse.id.desc': '响应唯一标识',
+    'chatresponse.choices.desc': '生成的回复选项列表',
+    'chatresponse.usage.desc': 'Token 用量统计',
+    'chatresponse.model.desc': '实际使用的模型名称',
+    'chatresponse.content.desc': '获取第一个 Choice 的文本内容，无内容时返回 null',
+    'chatresponse.choice.index.desc': '选项索引',
+    'chatresponse.choice.message.desc': '生成的消息（包含内容或工具调用）',
+    'chatresponse.choice.finishReason.desc': '结束原因：stop、length、tool_calls',
+    'chatresponse.choice.logprobs.desc': 'Token 对数概率信息',
+    'chatmessage.desc': '不可变的对话消息模型，每条消息包含角色、内容，以及可选的工具调用信息。',
+    'chatmessage.role.system.desc': '系统指令，设定模型行为',
+    'chatmessage.role.user.desc': '用户输入的消息',
+    'chatmessage.role.assistant.desc': '模型生成的回复',
+    'chatmessage.role.tool.desc': '工具执行结果，反馈给模型',
+    'chatmessage.roleField.desc': '消息角色',
+    'chatmessage.content.desc': '消息文本内容',
+    'chatmessage.toolCalls.desc': '模型发起的工具调用列表（仅 ASSISTANT 角色）',
+    'chatmessage.toolCallId.desc': '对应的工具调用 ID（仅 TOOL 角色）',
+    'chatmessage.system.desc': '创建 SYSTEM 角色消息',
+    'chatmessage.user.desc': '创建 USER 角色消息',
+    'chatmessage.assistant.desc': '创建 ASSISTANT 角色消息',
+    'chatmessage.toolResult.desc': '创建 TOOL 角色消息，包含工具调用 ID 和执行结果',
+    'chatchunk.desc': '不可变的流式响应数据块，在 StreamListener.onChunk() 回调中使用。',
+    'chatchunk.id.desc': '响应流唯一标识',
+    'chatchunk.choices.desc': '流式选项列表',
+    'chatchunk.delta.desc': '获取第一个 Choice 的增量文本内容',
+    'chatchunk.chunkchoice.index.desc': '选项索引',
+    'chatchunk.chunkchoice.delta.desc': '增量消息内容',
+    'chatchunk.chunkchoice.finishReason.desc': '结束原因，最后一个块为 stop/length/tool_calls',
+    'tooldef.desc': '工具/函数定义，描述模型可以调用的外部工具。通过 Builder 模式构建。',
+    'tooldef.name.desc': '工具名称',
+    'tooldef.description.desc': '工具功能描述，帮助模型决定何时调用',
+    'tooldef.parameters.desc': 'JSON Schema 格式的参数定义',
+    'toolcall.desc': '模型发起的工具调用，包含在 ASSISTANT 角色的 ChatMessage 中。',
+    'toolcall.id.desc': '工具调用的唯一标识',
+    'toolcall.name.desc': '调用的工具名称',
+    'toolcall.arguments.desc': '模型生成的 JSON 格式调用参数',
+    'toolresult.desc': '工具执行结果，用于将工具调用结果反馈给模型以继续对话。',
+    'toolresult.toolCallId.desc': '对应的工具调用 ID',
+    'toolresult.content.desc': '工具执行结果内容',
+    'toolresult.isError.desc': '是否为错误结果，默认 false',
+    'usage.desc': 'Token 用量统计，包含在 ChatResponse 中。',
+    'usage.promptTokens.desc': '输入 prompt 消耗的 token 数',
+    'usage.completionTokens.desc': '生成回复消耗的 token 数',
+    'usage.totalTokens.desc': '总消耗 token 数',
+    'choicelogprobs.desc': 'Token 级别的对数概率信息，需在 ChatRequest 中设置 logprobs=true 开启。',
+    'choicelogprobs.content.desc': '每个生成 token 的对数概率信息',
+    'tokenlogprob.token.desc': '生成的 token 文本',
+    'tokenlogprob.logprob.desc': '该 token 的对数概率',
+    'tokenlogprob.topLogprobs.desc': '前 N 个候选 token 及其概率',
+    'toplogprob.token.desc': '候选 token 文本',
+    'toplogprob.logprob.desc': '该候选 token 的对数概率'
+  },
+  en: {
+    'nav.home': 'Home',
+    'nav.api': 'API',
+    'sidebar.core': 'Core Interfaces',
+    'sidebar.models': 'Request / Response',
+    'sidebar.tools': 'Tool Calling',
+    'sidebar.aux': 'Auxiliary',
+    'page.title': 'API Reference',
+    'page.desc': 'Complete reference for the LLMKit public API. All classes are in the io.llmkit or io.llmkit.model package.',
+    'badge.class': 'Class',
+    'badge.interface': 'Interface',
+    'badge.enum': 'Enum',
+    'badge.nested': 'Nested',
+    'label.staticMethods': 'Static Methods',
+    'label.methods': 'Methods',
+    'label.builderMethods': 'Builder Methods',
+    'label.callbackMethods': 'Callback Methods',
+    'label.fields': 'Fields',
+    'label.factoryMethods': 'Factory Methods',
+    'label.convenienceMethods': 'Convenience Methods',
+    'label.constants': 'Constants',
+    'col.method': 'Method',
+    'col.return': 'Return',
+    'col.param': 'Param Type',
+    'col.description': 'Description',
+    'col.field': 'Field',
+    'col.type': 'Type',
+    'col.default': 'Default',
+    'col.constant': 'Constant',
+    'col.value': 'Value',
+    'col.provider': 'Provider',
+    'btn.copy': 'Copy',
+    'btn.copied': 'Copied',
+    'llmkit.desc': 'Entry point facade that discovers provider modules on the classpath via Java ServiceLoader (SPI). Provides static factory methods for creating clients.',
+    'llmkit.create.desc': 'Create a default client with an API key (uses the first available provider)',
+    'llmkit.builder.desc': 'Create a builder for a specific provider with chainable configuration',
+    'llmkit.providers.desc': 'List all registered provider names',
+    'llmclient.desc': 'Core client interface, extends AutoCloseable. Supports synchronous, streaming, and one-shot chat.',
+    'llmclient.chat.desc': 'Synchronous chat completion, returns full response',
+    'llmclient.chatStream.desc': 'Streaming chat, receives chunks via StreamListener callback',
+    'llmclient.chatSimple.desc': 'One-shot convenience method, sends a message and returns text directly',
+    'llmbuilder.desc': 'Client builder interface, obtained via LlmKit.builder(name). Supports fluent chaining.',
+    'llmbuilder.apiKey.desc': 'Set API key (required)',
+    'llmbuilder.model.desc': 'Set model name, defaults to provider\'s default model',
+    'llmbuilder.baseUrl.desc': 'Override default API endpoint, useful for proxies or local models (e.g. Ollama)',
+    'llmbuilder.timeout.desc': 'Set request timeout',
+    'llmbuilder.retry.desc': 'Set retry policy, automatically retries on 429 or 5xx',
+    'llmbuilder.build.desc': 'Build and return the LlmClient instance',
+    'streamlistener.desc': 'Streaming response callback interface, used with chatStream() to receive output incrementally.',
+    'streamlistener.onChunk.desc': 'Called for each streaming chunk received',
+    'streamlistener.onComplete.desc': 'Called when the stream completes with the full response',
+    'streamlistener.onError.desc': 'Called when an error occurs',
+    'retrypolicy.desc': 'Retry policy configuration for automatic retries on HTTP 429 (rate limit) or 5xx (server error). Uses exponential backoff.',
+    'retrypolicy.maxRetries.desc': 'Maximum number of retries',
+    'retrypolicy.initialDelayMs.desc': 'Wait time before first retry (milliseconds)',
+    'retrypolicy.backoffMultiplier.desc': 'Backoff multiplier, wait time is multiplied by this value on each retry',
+    'retrypolicy.maxDelayMs.desc': 'Maximum wait time cap (milliseconds)',
+    'retrypolicy.builder.desc': 'Create a Builder instance',
+    'retrypolicy.defaults.desc': 'Return default retry policy (3 retries, 1s initial delay, 2x backoff)',
+    'providers.desc': 'Built-in provider name constants for use with LlmKit.builder(name) to avoid hardcoded strings.',
+    'providers.glm': 'Zhipu AI (GLM)',
+    'providers.qwen': 'DashScope (Qwen)',
+    'providers.kimi': 'Moonshot AI (Kimi)',
+    'chatrequest.desc': 'Immutable chat request model built via the Builder pattern. Contains messages, model parameters, and tool definitions.',
+    'chatrequest.model.desc': 'Model name, uses client default if not set',
+    'chatrequest.messages.desc': 'Conversation messages in order',
+    'chatrequest.temperature.desc': 'Sampling temperature, 0.0~2.0, higher = more random',
+    'chatrequest.maxTokens.desc': 'Maximum number of tokens to generate',
+    'chatrequest.tools.desc': 'List of tool/function definitions available for calling',
+    'chatrequest.topP.desc': 'Nucleus sampling parameter',
+    'chatrequest.seed.desc': 'Random seed for reproducible outputs',
+    'chatrequest.stop.desc': 'Stop sequences, model stops when encountering these strings',
+    'chatrequest.logprobs.desc': 'Whether to return token log probabilities',
+    'chatrequest.topLogprobs.desc': 'Number of top log probabilities per token (0~20)',
+    'chatrequest.responseFormat.desc': 'Response format: text, json_object, or json_schema',
+    'chatrequest.jsonRF.desc': 'Set response format to JSON object mode',
+    'chatrequest.textRF.desc': 'Set response format to plain text mode',
+    'chatrequest.schemaRF.desc': 'Set response format to JSON Schema structured output',
+    'chatresponse.desc': 'Immutable chat response model containing one or more Choices, token usage, and model info.',
+    'chatresponse.id.desc': 'Unique response identifier',
+    'chatresponse.choices.desc': 'List of generated response choices',
+    'chatresponse.usage.desc': 'Token usage statistics',
+    'chatresponse.model.desc': 'Actual model name used',
+    'chatresponse.content.desc': 'Get text content of the first Choice, returns null if empty',
+    'chatresponse.choice.index.desc': 'Choice index',
+    'chatresponse.choice.message.desc': 'Generated message (content or tool calls)',
+    'chatresponse.choice.finishReason.desc': 'Finish reason: stop, length, tool_calls',
+    'chatresponse.choice.logprobs.desc': 'Token log probability information',
+    'chatmessage.desc': 'Immutable chat message with a role and content, plus optional tool call information.',
+    'chatmessage.role.system.desc': 'System instruction, sets model behavior',
+    'chatmessage.role.user.desc': 'User input message',
+    'chatmessage.role.assistant.desc': 'Model-generated reply',
+    'chatmessage.role.tool.desc': 'Tool execution result, fed back to the model',
+    'chatmessage.roleField.desc': 'Message role',
+    'chatmessage.content.desc': 'Message text content',
+    'chatmessage.toolCalls.desc': 'Tool calls initiated by the model (ASSISTANT role only)',
+    'chatmessage.toolCallId.desc': 'Corresponding tool call ID (TOOL role only)',
+    'chatmessage.system.desc': 'Create a SYSTEM role message',
+    'chatmessage.user.desc': 'Create a USER role message',
+    'chatmessage.assistant.desc': 'Create an ASSISTANT role message',
+    'chatmessage.toolResult.desc': 'Create a TOOL role message with tool call ID and result',
+    'chatchunk.desc': 'Immutable streaming chunk, used in the StreamListener.onChunk() callback.',
+    'chatchunk.id.desc': 'Unique stream response identifier',
+    'chatchunk.choices.desc': 'Streaming choice list',
+    'chatchunk.delta.desc': 'Get the delta text of the first Choice',
+    'chatchunk.chunkchoice.index.desc': 'Choice index',
+    'chatchunk.chunkchoice.delta.desc': 'Incremental message content',
+    'chatchunk.chunkchoice.finishReason.desc': 'Finish reason, last chunk is stop/length/tool_calls',
+    'tooldef.desc': 'Tool/function definition describing an external tool the model can invoke. Built via Builder pattern.',
+    'tooldef.name.desc': 'Tool name',
+    'tooldef.description.desc': 'Tool description, helps model decide when to call',
+    'tooldef.parameters.desc': 'JSON Schema parameter definition',
+    'toolcall.desc': 'A tool call initiated by the model, contained in an ASSISTANT ChatMessage.',
+    'toolcall.id.desc': 'Unique tool call identifier',
+    'toolcall.name.desc': 'Name of the tool to call',
+    'toolcall.arguments.desc': 'JSON-formatted arguments generated by the model',
+    'toolresult.desc': 'Tool execution result, used to feed back tool results to the model.',
+    'toolresult.toolCallId.desc': 'Corresponding tool call ID',
+    'toolresult.content.desc': 'Tool execution result content',
+    'toolresult.isError.desc': 'Whether this is an error result, defaults to false',
+    'usage.desc': 'Token usage statistics, included in ChatResponse.',
+    'usage.promptTokens.desc': 'Tokens consumed by the input prompt',
+    'usage.completionTokens.desc': 'Tokens consumed by the generated reply',
+    'usage.totalTokens.desc': 'Total tokens consumed',
+    'choicelogprobs.desc': 'Token-level log probability information. Enable by setting logprobs=true in ChatRequest.',
+    'choicelogprobs.content.desc': 'Log probability info for each generated token',
+    'tokenlogprob.token.desc': 'Generated token text',
+    'tokenlogprob.logprob.desc': 'Log probability of this token',
+    'tokenlogprob.topLogprobs.desc': 'Top N candidate tokens and their probabilities',
+    'toplogprob.token.desc': 'Candidate token text',
+    'toplogprob.logprob.desc': 'Log probability of this candidate token'
+  },
+  ja: {
+    'nav.home': 'ホーム',
+    'nav.api': 'API',
+    'sidebar.core': 'コアインターフェース',
+    'sidebar.models': 'リクエスト / レスポンス',
+    'sidebar.tools': 'ツール呼び出し',
+    'sidebar.aux': '補助クラス',
+    'page.title': 'API リファレンス',
+    'page.desc': 'LLMKit パブリック API の完全リファレンス。すべてのクラスは io.llmkit または io.llmkit.model パッケージにあります。',
+    'badge.class': 'クラス',
+    'badge.interface': 'インターフェース',
+    'badge.enum': '列挙型',
+    'badge.nested': 'ネストされたクラス',
+    'label.staticMethods': '静的メソッド',
+    'label.methods': 'メソッド',
+    'label.builderMethods': 'ビルダーメソッド',
+    'label.callbackMethods': 'コールバックメソッド',
+    'label.fields': 'フィールド',
+    'label.factoryMethods': 'ファクトリメソッド',
+    'label.convenienceMethods': '便利メソッド',
+    'label.constants': '定数',
+    'col.method': 'メソッド',
+    'col.return': '戻り値',
+    'col.param': 'パラメータ型',
+    'col.description': '説明',
+    'col.field': 'フィールド',
+    'col.type': '型',
+    'col.default': 'デフォルト',
+    'col.constant': '定数',
+    'col.value': '値',
+    'col.provider': 'プロバイダー',
+    'btn.copy': 'コピー',
+    'btn.copied': 'コピー済み',
+    'llmkit.desc': 'エントリポイントファサード。Java ServiceLoader (SPI) を介してクラスパス上のプロバイダーモジュールを自動検出し、クライアント作成の静的ファクトリメソッドを提供します。',
+    'llmkit.create.desc': 'API キーでデフォルトクライアントを作成（最初に利用可能なプロバイダーを使用）',
+    'llmkit.builder.desc': '指定したプロバイダーのビルダーを作成、チェーンで設定可能',
+    'llmkit.providers.desc': '登録済みの全プロバイダー名を一覧表示',
+    'llmclient.desc': 'コアクライアントインターフェース。AutoCloseable を実装。同期、ストリーミング、ワンショットの3つの呼び出し方法を提供します。',
+    'llmclient.chat.desc': '同期チャット補完、リクエストを送信して完全なレスポンスを返す',
+    'llmclient.chatStream.desc': 'ストリーミングチャット、StreamListener コールバックでチャンクを受信',
+    'llmclient.chatSimple.desc': 'ワンショット便利メソッド、単一メッセージを送信してテキストを直接返す',
+    'llmbuilder.desc': 'クライアントビルダーインターフェース。LlmKit.builder(name) で取得。メソッドチェーンをサポート。',
+    'llmbuilder.apiKey.desc': 'API キーを設定（必須）',
+    'llmbuilder.model.desc': 'モデル名を設定、デフォルトはプロバイダーのデフォルトモデル',
+    'llmbuilder.baseUrl.desc': 'デフォルトの API エンドポイントを上書き、プロキシやローカルモデル（Ollama 等）に使用',
+    'llmbuilder.timeout.desc': 'リクエストタイムアウトを設定',
+    'llmbuilder.retry.desc': 'リトライポリシーを設定、429 または 5xx で自動リトライ',
+    'llmbuilder.build.desc': 'LlmClient インスタンスをビルドして返す',
+    'streamlistener.desc': 'ストリーミングレスポンスコールバックインターフェース。chatStream() で出力を段階的に受信するために使用。',
+    'streamlistener.onChunk.desc': 'ストリーミングチャンクを受信するたびに呼び出される',
+    'streamlistener.onComplete.desc': 'ストリーム完了時に完全なレスポンスと共に呼び出される',
+    'streamlistener.onError.desc': 'エラー発生時に呼び出される',
+    'retrypolicy.desc': 'HTTP 429（レート制限）または 5xx（サーバーエラー）時の自動リトライ設定。指数バックオフを使用。',
+    'retrypolicy.maxRetries.desc': '最大リトライ回数',
+    'retrypolicy.initialDelayMs.desc': '最初のリトライ前の待機時間（ミリ秒）',
+    'retrypolicy.backoffMultiplier.desc': 'バックオフ倍率、各リトライの待機時間に乗算',
+    'retrypolicy.maxDelayMs.desc': '最大待機時間の上限（ミリ秒）',
+    'retrypolicy.builder.desc': 'Builder インスタンスを作成',
+    'retrypolicy.defaults.desc': 'デフォルトのリトライポリシーを返す（3 回リトライ、1 秒初期遅延、2 倍バックオフ）',
+    'providers.desc': '組み込みプロバイダー名定数。LlmKit.builder(name) でハードコード文字列を避けるために使用。',
+    'providers.glm': 'Zhipu AI (GLM)',
+    'providers.qwen': 'DashScope (Qwen)',
+    'providers.kimi': 'Moonshot AI (Kimi)',
+    'chatrequest.desc': '不変のチャットリクエストモデル。Builder パターンで構築。メッセージ、モデルパラメータ、ツール定義を含みます。',
+    'chatrequest.model.desc': 'モデル名、未設定時はクライアントのデフォルトモデルを使用',
+    'chatrequest.messages.desc': '順序付きの会話メッセージリスト',
+    'chatrequest.temperature.desc': 'サンプリング温度、0.0~2.0、高いほどランダム',
+    'chatrequest.maxTokens.desc': '生成する最大トークン数',
+    'chatrequest.tools.desc': '呼び出し可能なツール/関数定義のリスト',
+    'chatrequest.topP.desc': '核サンプリングパラメータ (nucleus sampling)',
+    'chatrequest.seed.desc': '再現可能な出力のためのランダムシード',
+    'chatrequest.stop.desc': 'ストップシーケンス、モデルがこの文字列に遭遇すると生成を停止',
+    'chatrequest.logprobs.desc': 'トークンの対数確率を返すかどうか',
+    'chatrequest.topLogprobs.desc': '各トークンの上位 N 個の対数確率 (0~20)',
+    'chatrequest.responseFormat.desc': 'レスポンス形式：text、json_object、json_schema',
+    'chatrequest.jsonRF.desc': 'レスポンス形式を JSON オブジェクトモードに設定',
+    'chatrequest.textRF.desc': 'レスポンス形式をプレーンテキストモードに設定',
+    'chatrequest.schemaRF.desc': 'レスポンス形式を JSON Schema 構造化出力に設定',
+    'chatresponse.desc': '不変のチャットレスポンスモデル。1つ以上の Choice、トークン使用量、モデル情報を含みます。',
+    'chatresponse.id.desc': '一意のレスポンス識別子',
+    'chatresponse.choices.desc': '生成されたレスポンス選択肢のリスト',
+    'chatresponse.usage.desc': 'トークン使用量の統計',
+    'chatresponse.model.desc': '実際に使用されたモデル名',
+    'chatresponse.content.desc': '最初の Choice のテキスト内容を取得、空の場合は null',
+    'chatresponse.choice.index.desc': '選択肢インデックス',
+    'chatresponse.choice.message.desc': '生成されたメッセージ（内容またはツール呼び出し）',
+    'chatresponse.choice.finishReason.desc': '終了理由：stop、length、tool_calls',
+    'chatresponse.choice.logprobs.desc': 'トークン対数確率情報',
+    'chatmessage.desc': '不変のチャットメッセージ。ロール、内容、オプションのツール呼び出し情報を含みます。',
+    'chatmessage.role.system.desc': 'システム命令、モデルの動作を設定',
+    'chatmessage.role.user.desc': 'ユーザー入力メッセージ',
+    'chatmessage.role.assistant.desc': 'モデルが生成した返信',
+    'chatmessage.role.tool.desc': 'ツール実行結果、モデルにフィードバック',
+    'chatmessage.roleField.desc': 'メッセージロール',
+    'chatmessage.content.desc': 'メッセージテキスト内容',
+    'chatmessage.toolCalls.desc': 'モデルが開始したツール呼び出しリスト（ASSISTANT ロールのみ）',
+    'chatmessage.toolCallId.desc': '対応するツール呼び出し ID（TOOL ロールのみ）',
+    'chatmessage.system.desc': 'SYSTEM ロールメッセージを作成',
+    'chatmessage.user.desc': 'USER ロールメッセージを作成',
+    'chatmessage.assistant.desc': 'ASSISTANT ロールメッセージを作成',
+    'chatmessage.toolResult.desc': 'ツール呼び出し ID と結果を含む TOOL ロールメッセージを作成',
+    'chatchunk.desc': '不変のストリーミングチャンク。StreamListener.onChunk() コールバックで使用。',
+    'chatchunk.id.desc': '一意のストリームレスポンス識別子',
+    'chatchunk.choices.desc': 'ストリーミング選択肢リスト',
+    'chatchunk.delta.desc': '最初の Choice の差分テキストを取得',
+    'chatchunk.chunkchoice.index.desc': '選択肢インデックス',
+    'chatchunk.chunkchoice.delta.desc': '差分メッセージ内容',
+    'chatchunk.chunkchoice.finishReason.desc': '終了理由、最後のチャンクは stop/length/tool_calls',
+    'tooldef.desc': 'モデルが呼び出せる外部ツールを記述するツール/関数定義。Builder パターンで構築。',
+    'tooldef.name.desc': 'ツール名',
+    'tooldef.description.desc': 'ツールの説明、モデルがいつ呼び出すかを判断するのに役立つ',
+    'tooldef.parameters.desc': 'JSON Schema 形式のパラメータ定義',
+    'toolcall.desc': 'モデルが開始したツール呼び出し。ASSISTANT ChatMessage に含まれます。',
+    'toolcall.id.desc': '一意のツール呼び出し識別子',
+    'toolcall.name.desc': '呼び出すツールの名前',
+    'toolcall.arguments.desc': 'モデルが生成した JSON 形式の呼び出し引数',
+    'toolresult.desc': 'ツール実行結果。ツール呼び出し結果をモデルにフィードバックするために使用。',
+    'toolresult.toolCallId.desc': '対応するツール呼び出し ID',
+    'toolresult.content.desc': 'ツール実行結果の内容',
+    'toolresult.isError.desc': 'エラー結果かどうか、デフォルトは false',
+    'usage.desc': 'トークン使用量の統計。ChatResponse に含まれます。',
+    'usage.promptTokens.desc': '入力プロンプトで消費されたトークン数',
+    'usage.completionTokens.desc': '生成された返信で消費されたトークン数',
+    'usage.totalTokens.desc': '合計消費トークン数',
+    'choicelogprobs.desc': 'トークンレベルの対数確率情報。ChatRequest で logprobs=true を設定して有効化。',
+    'choicelogprobs.content.desc': '各生成トークンの対数確率情報',
+    'tokenlogprob.token.desc': '生成されたトークンテキスト',
+    'tokenlogprob.logprob.desc': 'このトークンの対数確率',
+    'tokenlogprob.topLogprobs.desc': '上位 N 個の候補トークンとその確率',
+    'toplogprob.token.desc': '候補トークンテキスト',
+    'toplogprob.logprob.desc': 'この候補トークンの対数確率'
+  },
+  ko: {
+    'nav.home': '홈',
+    'nav.api': 'API',
+    'sidebar.core': '핵심 인터페이스',
+    'sidebar.models': '요청 / 응답',
+    'sidebar.tools': '도구 호출',
+    'sidebar.aux': '보조 클래스',
+    'page.title': 'API 레퍼런스',
+    'page.desc': 'LLMKit 공개 API의 완전한 레퍼런스 문서입니다. 모든 클래스는 io.llmkit 또는 io.llmkit.model 패키지에 있습니다.',
+    'badge.class': '클래스',
+    'badge.interface': '인터페이스',
+    'badge.enum': '열거형',
+    'badge.nested': '중첩 클래스',
+    'label.staticMethods': '정적 메서드',
+    'label.methods': '메서드',
+    'label.builderMethods': '빌더 메서드',
+    'label.callbackMethods': '콜백 메서드',
+    'label.fields': '필드',
+    'label.factoryMethods': '팩토리 메서드',
+    'label.convenienceMethods': '편의 메서드',
+    'label.constants': '상수',
+    'col.method': '메서드',
+    'col.return': '반환값',
+    'col.param': '매개변수 타입',
+    'col.description': '설명',
+    'col.field': '필드',
+    'col.type': '타입',
+    'col.default': '기본값',
+    'col.constant': '상수',
+    'col.value': '값',
+    'col.provider': '제공자',
+    'btn.copy': '복사',
+    'btn.copied': '복사됨',
+    'llmkit.desc': '진입점 퍼사드 클래스. Java ServiceLoader(SPI)를 통해 클래스패스에서 제공자 모듈을 자동으로 발견하고 클라이언트 생성을 위한 정적 팩토리 메서드를 제공합니다.',
+    'llmkit.create.desc': 'API 키로 기본 클라이언트 생성 (첫 번째 사용 가능한 제공자 사용)',
+    'llmkit.builder.desc': '지정된 제공자의 빌더를 생성, 체인으로 설정 가능',
+    'llmkit.providers.desc': '등록된 모든 제공자 이름 나열',
+    'llmclient.desc': '핵심 클라이언트 인터페이스, AutoCloseable 구현. 동기식, 스트리밍, 원샷의 3가지 호출 방식을 제공합니다.',
+    'llmclient.chat.desc': '동기식 채팅 완성, 요청을 보내고 전체 응답 반환',
+    'llmclient.chatStream.desc': '스트리밍 채팅, StreamListener 콜백으로 청크 수신',
+    'llmclient.chatSimple.desc': '원샷 편의 메서드, 단일 메시지를 보내고 텍스트를 직접 반환',
+    'llmbuilder.desc': '클라이언트 빌더 인터페이스. LlmKit.builder(name)으로 얻습니다. 메서드 체이닝을 지원합니다.',
+    'llmbuilder.apiKey.desc': 'API 키 설정 (필수)',
+    'llmbuilder.model.desc': '모델 이름 설정, 기본값은 제공자의 기본 모델',
+    'llmbuilder.baseUrl.desc': '기본 API 엔드포인트 재정의, 프록시나 로컬 모델(Ollama 등)에 사용',
+    'llmbuilder.timeout.desc': '요청 타임아웃 설정',
+    'llmbuilder.retry.desc': '재시도 정책 설정, 429 또는 5xx에서 자동 재시도',
+    'llmbuilder.build.desc': 'LlmClient 인스턴스를 빌드하고 반환',
+    'streamlistener.desc': '스트리밍 응답 콜백 인터페이스. chatStream()에서 출력을 점진적으로 수신하는 데 사용합니다.',
+    'streamlistener.onChunk.desc': '스트리밍 청크를 수신할 때마다 호출',
+    'streamlistener.onComplete.desc': '스트림 완료 시 전체 응답과 함께 호출',
+    'streamlistener.onError.desc': '오류 발생 시 호출',
+    'retrypolicy.desc': 'HTTP 429(속도 제한) 또는 5xx(서버 오류) 시 자동 재시도 설정. 지수 백오프를 사용합니다.',
+    'retrypolicy.maxRetries.desc': '최대 재시도 횟수',
+    'retrypolicy.initialDelayMs.desc': '첫 번째 재시도 전 대기 시간 (밀리초)',
+    'retrypolicy.backoffMultiplier.desc': '백오프 배율, 각 재시도의 대기 시간에 곱해짐',
+    'retrypolicy.maxDelayMs.desc': '최대 대기 시간 상한 (밀리초)',
+    'retrypolicy.builder.desc': 'Builder 인스턴스 생성',
+    'retrypolicy.defaults.desc': '기본 재시도 정책 반환 (3회 재시도, 1초 초기 지연, 2배 백오프)',
+    'providers.desc': '내장 제공자 이름 상수. LlmKit.builder(name)에서 하드코딩 문자열을 피하기 위해 사용합니다.',
+    'providers.glm': 'Zhipu AI (GLM)',
+    'providers.qwen': 'DashScope (Qwen)',
+    'providers.kimi': 'Moonshot AI (Kimi)',
+    'chatrequest.desc': '불변 채팅 요청 모델. Builder 패턴으로 구축. 메시지, 모델 매개변수, 도구 정의를 포함합니다.',
+    'chatrequest.model.desc': '모델 이름, 미설정 시 클라이언트 기본 모델 사용',
+    'chatrequest.messages.desc': '순서대로 정렬된 대화 메시지 목록',
+    'chatrequest.temperature.desc': '샘플링 온도, 0.0~2.0, 높을수록 무작위',
+    'chatrequest.maxTokens.desc': '생성할 최대 토큰 수',
+    'chatrequest.tools.desc': '호출 가능한 도구/함수 정의 목록',
+    'chatrequest.topP.desc': '핵 샘플링 매개변수 (nucleus sampling)',
+    'chatrequest.seed.desc': '재현 가능한 출력을 위한 난수 시드',
+    'chatrequest.stop.desc': '중지 시퀀스, 모델이 이 문자열을 만나면 생성 중지',
+    'chatrequest.logprobs.desc': '토큰 로그 확률 반환 여부',
+    'chatrequest.topLogprobs.desc': '각 토큰당 상위 N개 로그 확률 (0~20)',
+    'chatrequest.responseFormat.desc': '응답 형식: text, json_object, json_schema',
+    'chatrequest.jsonRF.desc': '응답 형식을 JSON 객체 모드로 설정',
+    'chatrequest.textRF.desc': '응답 형식을 일반 텍스트 모드로 설정',
+    'chatrequest.schemaRF.desc': '응답 형식을 JSON Schema 구조화된 출력으로 설정',
+    'chatresponse.desc': '불변 채팅 응답 모델. 하나 이상의 Choice, 토큰 사용량, 모델 정보를 포함합니다.',
+    'chatresponse.id.desc': '고유 응답 식별자',
+    'chatresponse.choices.desc': '생성된 응답 선택 목록',
+    'chatresponse.usage.desc': '토큰 사용량 통계',
+    'chatresponse.model.desc': '실제 사용된 모델 이름',
+    'chatresponse.content.desc': '첫 번째 Choice의 텍스트 내용 가져오기, 비어있으면 null',
+    'chatresponse.choice.index.desc': '선택 인덱스',
+    'chatresponse.choice.message.desc': '생성된 메시지 (내용 또는 도구 호출)',
+    'chatresponse.choice.finishReason.desc': '종료 이유: stop, length, tool_calls',
+    'chatresponse.choice.logprobs.desc': '토큰 로그 확률 정보',
+    'chatmessage.desc': '불변 채팅 메시지. 역할, 내용, 선택적 도구 호출 정보를 포함합니다.',
+    'chatmessage.role.system.desc': '시스템 명령, 모델 동작 설정',
+    'chatmessage.role.user.desc': '사용자 입력 메시지',
+    'chatmessage.role.assistant.desc': '모델이 생성한 응답',
+    'chatmessage.role.tool.desc': '도구 실행 결과, 모델에 피드백',
+    'chatmessage.roleField.desc': '메시지 역할',
+    'chatmessage.content.desc': '메시지 텍스트 내용',
+    'chatmessage.toolCalls.desc': '모델이 시작한 도구 호출 목록 (ASSISTANT 역할만)',
+    'chatmessage.toolCallId.desc': '해당 도구 호출 ID (TOOL 역할만)',
+    'chatmessage.system.desc': 'SYSTEM 역할 메시지 생성',
+    'chatmessage.user.desc': 'USER 역할 메시지 생성',
+    'chatmessage.assistant.desc': 'ASSISTANT 역할 메시지 생성',
+    'chatmessage.toolResult.desc': '도구 호출 ID와 결과가 포함된 TOOL 역할 메시지 생성',
+    'chatchunk.desc': '불변 스트리밍 청크. StreamListener.onChunk() 콜백에서 사용합니다.',
+    'chatchunk.id.desc': '고유 스트림 응답 식별자',
+    'chatchunk.choices.desc': '스트리밍 선택 목록',
+    'chatchunk.delta.desc': '첫 번째 Choice의 증분 텍스트 가져오기',
+    'chatchunk.chunkchoice.index.desc': '선택 인덱스',
+    'chatchunk.chunkchoice.delta.desc': '증분 메시지 내용',
+    'chatchunk.chunkchoice.finishReason.desc': '종료 이유, 마지막 청크는 stop/length/tool_calls',
+    'tooldef.desc': '모델이 호출할 수 있는 외부 도구를 설명하는 도구/함수 정의. Builder 패턴으로 구축.',
+    'tooldef.name.desc': '도구 이름',
+    'tooldef.description.desc': '도구 설명, 모델이 언제 호출할지 결정하는 데 도움',
+    'tooldef.parameters.desc': 'JSON Schema 형식의 매개변수 정의',
+    'toolcall.desc': '모델이 시작한 도구 호출. ASSISTANT ChatMessage에 포함됩니다.',
+    'toolcall.id.desc': '고유 도구 호출 식별자',
+    'toolcall.name.desc': '호출할 도구의 이름',
+    'toolcall.arguments.desc': '모델이 생성한 JSON 형식 호출 인수',
+    'toolresult.desc': '도구 실행 결과. 도구 호출 결과를 모델에 피드백하는 데 사용합니다.',
+    'toolresult.toolCallId.desc': '해당 도구 호출 ID',
+    'toolresult.content.desc': '도구 실행 결과 내용',
+    'toolresult.isError.desc': '오류 결과 여부, 기본값 false',
+    'usage.desc': '토큰 사용량 통계. ChatResponse에 포함됩니다.',
+    'usage.promptTokens.desc': '입력 프롬프트에 소비된 토큰 수',
+    'usage.completionTokens.desc': '생성된 응답에 소비된 토큰 수',
+    'usage.totalTokens.desc': '총 소비 토큰 수',
+    'choicelogprobs.desc': '토큰 수준의 로그 확률 정보. ChatRequest에서 logprobs=true로 설정하여 활성화.',
+    'choicelogprobs.content.desc': '각 생성 토큰의 로그 확률 정보',
+    'tokenlogprob.token.desc': '생성된 토큰 텍스트',
+    'tokenlogprob.logprob.desc': '이 토큰의 로그 확률',
+    'tokenlogprob.topLogprobs.desc': '상위 N개 후보 토큰 및 확률',
+    'toplogprob.token.desc': '후보 토큰 텍스트',
+    'toplogprob.logprob.desc': '이 후보 토큰의 로그 확률'
+  }
+};
+
+const pageTitles = {
+  zh: 'API Reference — LLMKit',
+  en: 'API Reference — LLMKit',
+  ja: 'API リファレンス — LLMKit',
+  ko: 'API 레퍼런스 — LLMKit'
+};
+
+const langCodes = { zh: 'zh-CN', en: 'en', ja: 'ja', ko: 'ko' };
+let currentLang = 'zh';
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  const dict = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+  document.title = pageTitles[lang] || pageTitles.en;
+  document.documentElement.lang = langCodes[lang] || 'zh-CN';
+  document.querySelectorAll('#langMenu button[data-lang]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+const savedLang = localStorage.getItem('lang') || 'zh';
+applyLanguage(savedLang);
+
+// Language menu
+const langBtn = document.getElementById('langBtn');
+const langMenu = document.getElementById('langMenu');
+langBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('open'); });
+document.querySelectorAll('#langMenu button[data-lang]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    applyLanguage(btn.dataset.lang);
+    localStorage.setItem('lang', btn.dataset.lang);
+    langMenu.classList.remove('open');
+  });
+});
+document.addEventListener('click', () => langMenu.classList.remove('open'));
+langMenu.addEventListener('click', (e) => e.stopPropagation());
+
+// Theme
+const html = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const iconSun = themeToggle.querySelector('.icon-sun');
+const iconMoon = themeToggle.querySelector('.icon-moon');
+
+function getPreferredTheme() {
+  const stored = localStorage.getItem('theme');
+  if (stored) return stored;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function setTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+  iconSun.style.display = theme === 'dark' ? 'none' : 'block';
+  iconMoon.style.display = theme === 'dark' ? 'block' : 'none';
+}
+
+setTheme(getPreferredTheme());
+themeToggle.addEventListener('click', () => {
+  setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+// Sidebar toggle (mobile)
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+sidebarToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('open');
+});
+sidebarOverlay.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('open');
+});
+
+// Sidebar active state on scroll
+const sections = document.querySelectorAll('.api-section');
+const sidebarLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+
+function updateActiveSidebar() {
+  let current = '';
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 100) current = section.id;
+  });
+  sidebarLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+}
+
+window.addEventListener('scroll', updateActiveSidebar, { passive: true });
+updateActiveSidebar();
+
+// Close sidebar on link click (mobile)
+sidebarLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 1024) {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -33,6 +33,9 @@
   --tag-bg: rgba(0,113,227,0.08);
   --tag-text: #0071e3;
   --glow: rgba(102,126,234,0.15);
+  --blob-1: rgba(102,126,234,0.12);
+  --blob-2: rgba(118,75,162,0.10);
+  --blob-3: rgba(0,113,227,0.08);
 }
 
 [data-theme="dark"] {
@@ -57,6 +60,9 @@
   --tag-bg: rgba(41,151,255,0.12);
   --tag-text: #2997ff;
   --glow: rgba(102,126,234,0.1);
+  --blob-1: rgba(102,126,234,0.18);
+  --blob-2: rgba(168,85,247,0.14);
+  --blob-3: rgba(41,151,255,0.12);
 }
 
 html {
@@ -67,16 +73,79 @@ html {
 
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
+  background: transparent;
   color: var(--text-primary);
   line-height: 1.5;
   overflow-x: hidden;
-  transition: background 0.4s ease, color 0.4s ease;
+  transition: color 0.4s ease;
 }
 
 ::selection {
   background: var(--accent);
   color: white;
+}
+
+/* ── Background Blobs ── */
+.bg-blobs {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+  transition: background 0.4s ease;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+
+.blob-1 {
+  width: 600px;
+  height: 600px;
+  background: var(--blob-1);
+  top: -10%;
+  right: -8%;
+  animation: blobDrift1 20s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  width: 500px;
+  height: 500px;
+  background: var(--blob-2);
+  bottom: 10%;
+  left: -6%;
+  animation: blobDrift2 24s ease-in-out infinite alternate;
+}
+
+.blob-3 {
+  width: 400px;
+  height: 400px;
+  background: var(--blob-3);
+  top: 45%;
+  left: 35%;
+  animation: blobDrift3 18s ease-in-out infinite alternate;
+}
+
+@keyframes blobDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-60px, 80px) scale(1.1); }
+  100% { transform: translate(40px, -40px) scale(0.95); }
+}
+
+@keyframes blobDrift2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(70px, -50px) scale(1.08); }
+  100% { transform: translate(-30px, 60px) scale(0.92); }
+}
+
+@keyframes blobDrift3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-50px, -70px) scale(1.12); }
+  100% { transform: translate(60px, 30px) scale(0.9); }
 }
 
 /* ── Navigation ── */
@@ -476,6 +545,20 @@ section {
 .hero-code pre .str { color: #a6e3a1; }
 .hero-code pre .method { color: #f9e2af; }
 .hero-code pre .comment { color: #6c7086; }
+.hero-code pre .output { color: #89dceb; }
+.hero-code pre .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #f9e2af;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 
 /* ── Features ── */
 #features {
@@ -918,6 +1001,72 @@ section {
   box-shadow: none;
 }
 
+/* ── CTA ── */
+#cta {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--section-alt) 100%);
+  transition: background 0.4s;
+}
+
+.cta-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cta-title {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-desc {
+  font-size: 17px;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+  line-height: 1.6;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.cta-stats {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.cta-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.cta-stat-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .cta-actions { flex-direction: column; }
+  .cta-actions .btn { width: 100%; justify-content: center; }
+  .cta-stats { gap: 16px; }
+}
+
 /* ── Footer ── */
 footer {
   padding: 48px 24px;
@@ -1070,6 +1219,12 @@ footer {
 </head>
 <body>
 
+<div class="bg-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <nav>
@@ -1086,7 +1241,7 @@ footer {
         <li><a href="#quickstart" class="nav-link-text" data-i18n="nav.quickstart">快速开始</a></li>
         <li><a href="#architecture" class="nav-link-text" data-i18n="nav.architecture">架构</a></li>
         <li><a href="#providers" class="nav-link-text" data-i18n="nav.providers">模型</a></li>
-        <li><a href="#api" class="nav-link-text" data-i18n="nav.api">API</a></li>
+        <li><a href="api.html" class="nav-link-text" data-i18n="nav.api">API</a></li>
         <li>
           <a href="https://github.com/IntelliMill/llmkit" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:5px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -1131,9 +1286,7 @@ footer {
     </div>
     <div class="hero-code reveal">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <pre><span class="type">LlmClient</span> client = <span class="type">LlmKit</span>.<span class="method">create</span>(<span class="str">"sk-xxx"</span>);
-<span class="type">String</span> answer = client.<span class="method">chat</span>(<span class="str">"What is the meaning of life?"</span>);
-<span class="type">System</span>.out.<span class="method">println</span>(answer);</pre>
+      <pre id="heroTyping"></pre>
     </div>
   </div>
 </section>
@@ -1527,6 +1680,44 @@ footer {
   </div>
 </section>
 
+<!-- ═══════ CTA ═══════ -->
+<section id="cta">
+  <div class="section-inner">
+    <div class="cta-inner reveal">
+      <h2 class="cta-title" data-i18n="cta.title">开始构建你的 AI 应用</h2>
+      <p class="cta-desc" data-i18n="cta.desc">三行代码接入 LLM，零依赖、轻量级，开箱即用。</p>
+      <div class="cta-actions">
+        <a href="https://github.com/IntelliMill/llmkit" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span data-i18n="cta.github">GitHub</span>
+        </a>
+        <a href="api.html" class="btn btn-secondary">
+          <span data-i18n="cta.apiDocs">API 文档</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="cta-stats">
+        <span class="cta-stat">
+          <svg class="cta-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span data-i18n="cta.stat.jdk">JDK 8+</span>
+        </span>
+        <span class="cta-stat">
+          <svg class="cta-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span data-i18n="cta.stat.size">&lt; 200KB</span>
+        </span>
+        <span class="cta-stat">
+          <svg class="cta-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span data-i18n="cta.stat.multi">多协议 · 多模型</span>
+        </span>
+        <span class="cta-stat">
+          <svg class="cta-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-i18n="cta.stat.license">MIT License</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════ Footer ═══════ -->
 <footer>
   <div class="footer-inner">
@@ -1582,6 +1773,14 @@ const i18n = {
     'api.stream.title': '流式输出',
     'api.tool.title': '函数调用 (Tool Calling)',
     'api.retry.title': '重试策略与高级配置',
+    'cta.title': '开始构建你的 AI 应用',
+    'cta.desc': '三行代码接入 LLM，零依赖、轻量级，开箱即用。',
+    'cta.github': 'GitHub',
+    'cta.apiDocs': 'API 文档',
+    'cta.stat.jdk': 'JDK 8+',
+    'cta.stat.size': '< 200KB',
+    'cta.stat.multi': '多协议 · 多模型',
+    'cta.stat.license': 'MIT License',
     'copy': '复制',
     'copied': '已复制'
   },
@@ -1623,6 +1822,14 @@ const i18n = {
     'api.stream.title': 'Streaming Output',
     'api.tool.title': 'Tool Calling',
     'api.retry.title': 'Retry Policy & Advanced Config',
+    'cta.title': 'Start Building Your AI App',
+    'cta.desc': 'Integrate LLM in 3 lines. Zero dependency, lightweight, ready to use.',
+    'cta.github': 'GitHub',
+    'cta.apiDocs': 'API Docs',
+    'cta.stat.jdk': 'JDK 8+',
+    'cta.stat.size': '< 200KB',
+    'cta.stat.multi': 'Multi-Protocol · Multi-Model',
+    'cta.stat.license': 'MIT License',
     'copy': 'Copy',
     'copied': 'Copied'
   },
@@ -1664,6 +1871,14 @@ const i18n = {
     'api.stream.title': 'ストリーミング出力',
     'api.tool.title': 'ツール呼び出し (Tool Calling)',
     'api.retry.title': 'リトライポリシーと詳細設定',
+    'cta.title': 'AI アプリケーションの構築を始めましょう',
+    'cta.desc': '3 行で LLM を統合。ゼロ依存、軽量、すぐに使えます。',
+    'cta.github': 'GitHub',
+    'cta.apiDocs': 'API ドキュメント',
+    'cta.stat.jdk': 'JDK 8+',
+    'cta.stat.size': '< 200KB',
+    'cta.stat.multi': 'マルチプロトコル · マルチモデル',
+    'cta.stat.license': 'MIT License',
     'copy': 'コピー',
     'copied': 'コピー済み'
   },
@@ -1705,6 +1920,14 @@ const i18n = {
     'api.stream.title': '스트리밍 출력',
     'api.tool.title': '함수 호출 (Tool Calling)',
     'api.retry.title': '재시도 정책 및 고급 설정',
+    'cta.title': 'AI 애플리케이션 구축을 시작하세요',
+    'cta.desc': '3줄로 LLM 통합. 종속성 없음, 가볍고, 바로 사용 가능.',
+    'cta.github': 'GitHub',
+    'cta.apiDocs': 'API 문서',
+    'cta.stat.jdk': 'JDK 8+',
+    'cta.stat.size': '< 200KB',
+    'cta.stat.multi': '멀티 프로토콜 · 멀티 모델',
+    'cta.stat.license': 'MIT License',
     'copy': '복사',
     'copied': '복사됨'
   }
@@ -1783,6 +2006,76 @@ themeToggle.addEventListener('click', () => {
   const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   setTheme(next);
 });
+
+// ── Hero Typewriter ──
+(function() {
+  const pre = document.getElementById('heroTyping');
+  if (!pre) return;
+
+  const segments = [
+    { cls: 'type', text: 'LlmClient' },
+    { text: ' client = ' },
+    { cls: 'type', text: 'LlmKit' },
+    { text: '.' },
+    { cls: 'method', text: 'create' },
+    { text: '(' },
+    { cls: 'str', text: '"sk-xxx"' },
+    { text: ');\n' },
+    { cls: 'type', text: 'String' },
+    { text: ' answer = client.' },
+    { cls: 'method', text: 'chat' },
+    { text: '(' },
+    { cls: 'str', text: '"What is the meaning of life?"' },
+    { text: ');\n' },
+  ];
+
+  const suffix = 'System.out.println(answer);';
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function createSpan(cls, text) {
+    const span = document.createElement('span');
+    if (cls) span.className = cls;
+    span.textContent = text;
+    return span;
+  }
+
+  let cursorSpan = createSpan('cursor', '');
+  cursorSpan.innerHTML = '​';
+
+  async function run() {
+    await sleep(800);
+
+    // Phase 1: type Java code
+    for (const seg of segments) {
+      const span = createSpan(seg.cls || '', '');
+      pre.appendChild(span);
+      for (const ch of seg.text) {
+        span.textContent += ch;
+        if (!pre.contains(cursorSpan)) pre.appendChild(cursorSpan);
+        else pre.appendChild(cursorSpan);
+        await sleep(ch === '\n' ? 80 : (ch === '.' || ch === '(' || ch === ')') ? 120 : 38);
+      }
+    }
+
+    await sleep(600);
+
+    // Phase 2: println
+    const suffixSpan = createSpan('', '');
+    pre.appendChild(suffixSpan);
+    for (const ch of suffix) {
+      suffixSpan.textContent += ch;
+      pre.appendChild(cursorSpan);
+      await sleep(ch === '\n' ? 80 : 35);
+    }
+
+    // Blink cursor a few times, then remove
+    await sleep(2000);
+    if (pre.contains(cursorSpan)) cursorSpan.remove();
+  }
+
+  run();
+})();
 
 // ── Reveal on scroll ──
 const reveals = document.querySelectorAll('.reveal');
