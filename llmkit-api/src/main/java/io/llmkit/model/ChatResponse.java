@@ -49,11 +49,17 @@ public final class ChatResponse {
     private final int index;
     private final ChatMessage message;
     private final String finishReason;
+    private final ChoiceLogprobs logprobs;
 
     public Choice(int index, ChatMessage message, String finishReason) {
+      this(index, message, finishReason, null);
+    }
+
+    public Choice(int index, ChatMessage message, String finishReason, ChoiceLogprobs logprobs) {
       this.index = index;
       this.message = message;
       this.finishReason = finishReason;
+      this.logprobs = logprobs;
     }
 
     public int getIndex() {
@@ -66,6 +72,10 @@ public final class ChatResponse {
 
     public String getFinishReason() {
       return finishReason;
+    }
+
+    public ChoiceLogprobs getLogprobs() {
+      return logprobs;
     }
   }
 }

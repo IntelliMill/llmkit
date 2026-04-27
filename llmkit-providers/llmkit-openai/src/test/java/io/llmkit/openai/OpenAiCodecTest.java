@@ -6,6 +6,8 @@ import io.llmkit.model.ChatChunk;
 import io.llmkit.model.ChatMessage;
 import io.llmkit.model.ChatRequest;
 import io.llmkit.model.ChatResponse;
+import io.llmkit.model.ChoiceLogprobs;
+import io.llmkit.model.TokenLogprob;
 import io.llmkit.model.ToolCall;
 import io.llmkit.model.ToolDefinition;
 import java.util.Arrays;
@@ -105,6 +107,67 @@ class OpenAiCodecTest {
     assertFalse(json.contains("temperature"));
     assertFalse(json.contains("max_tokens"));
     assertFalse(json.contains("tools"));
+    assertFalse(json.contains("top_p"));
+    assertFalse(json.contains("seed"));
+    assertFalse(json.contains("stop"));
+    assertFalse(json.contains("logprobs"));
+    assertFalse(json.contains("top_logprobs"));
+    assertFalse(json.contains("response_format"));
+  }
+
+  @Test
+  void encodeRequestWithTopP() {
+    ChatRequest req =
+        ChatRequest.builder().model("gpt-4o").addMessage(ChatMessage.user("hi")).topP(0.95).build();
+    String json = OpenAiCodec.encodeRequest(req);
+    assertTrue(json.contains("\"top_p\":0.95"));
+  }
+
+  @Test
+  void encodeRequestWithSeed() {
+    ChatRequest req =
+        ChatRequest.builder().model("gpt-4o").addMessage(ChatMessage.user("hi")).seed(42).build();
+    String json = OpenAiCodec.encodeRequest(req);
+    assertTrue(json.contains("\"seed\":42"));
+  }
+
+  @Test
+  void encodeRequestWithStop() {
+    ChatRequest req =
+        ChatRequest.builder()
+            .model("gpt-4o")
+            .addMessage(ChatMessage.user("hi"))
+            .stop(Arrays.asList("\n", "STOP"))
+            .build();
+    String json = OpenAiCodec.encodeRequest(req);
+    assertTrue(json.contains("\"stop\":[\"\\n\",\"STOP\"]"));
+  }
+
+  @Test
+  void encodeRequestWithLogprobs() {
+    ChatRequest req =
+        ChatRequest.builder()
+            .model("gpt-4o")
+            .addMessage(ChatMessage.user("hi"))
+            .logprobs(true)
+            .topLogprobs(5)
+            .build();
+    String json = OpenAiCodec.encodeRequest(req);
+    assertTrue(json.contains("\"logprobs\":true"));
+    assertTrue(json.contains("\"top_logprobs\":5"));
+  }
+
+  @Test
+  void encodeRequestWithResponseFormat() {
+    ChatRequest req =
+        ChatRequest.builder()
+            .model("gpt-4o")
+            .addMessage(ChatMessage.user("hi"))
+            .responseFormat("{\"type\":\"json_object\"}")
+            .build();
+    String json = OpenAiCodec.encodeRequest(req);
+    assertTrue(json.contains("\"response_format\":"));
+    assertTrue(json.contains("\"type\":\"json_object\""));
   }
 
   // ========== Response Decoding Tests ==========
@@ -201,5 +264,48 @@ class OpenAiCodecTest {
 
     ChatChunk chunk = OpenAiCodec.decodeChunk(json);
     assertEquals("", chunk.delta());
+  }
+
+  @Test
+  void decodeResponseWithLogprobs() {
+    String json =
+        "{\"id\":\"chatcmpl-lp\",\"model\":\"gpt-4o\","
+            + "\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hello!\"},"
+            + "\"finish_reason\":\"stop\","
+            + "\"logprobs\":{\"content\":["
+            + "{\"token\":\"Hello\",\"logprob\":-0.1234,\"top_logprobs\":[{\"token\":\"Hello\",\"logprob\":-0.1234},{\"token\":\"hello\",\"logprob\":-1.5678}]},"
+            + "{\"token\":\"!\",\"logprob\":-0.0001,\"top_logprobs\":[]}"
+            + "]}"
+            + "}]}";
+
+    ChatResponse resp = OpenAiCodec.decodeResponse(json);
+    assertEquals("Hello!", resp.content());
+    ChoiceLogprobs lp = resp.getChoices().get(0).getLogprobs();
+    assertNotNull(lp);
+    assertEquals(2, lp.getContent().size());
+
+    TokenLogprob t0 = lp.getContent().get(0);
+    assertEquals("Hello", t0.getToken());
+    assertEquals(-0.1234, t0.getLogprob());
+    assertEquals(2, t0.getTopLogprobs().size());
+    assertEquals("Hello", t0.getTopLogprobs().get(0).getToken());
+    assertEquals(-0.1234, t0.getTopLogprobs().get(0).getLogprob());
+    assertEquals("hello", t0.getTopLogprobs().get(1).getToken());
+    assertEquals(-1.5678, t0.getTopLogprobs().get(1).getLogprob());
+
+    TokenLogprob t1 = lp.getContent().get(1);
+    assertEquals("!", t1.getToken());
+    assertEquals(-0.0001, t1.getLogprob());
+    assertTrue(t1.getTopLogprobs().isEmpty());
+  }
+
+  @Test
+  void decodeResponseWithoutLogprobs() {
+    String json =
+        "{\"id\":\"x\",\"model\":\"m\","
+            + "\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"hi\"},\"finish_reason\":\"stop\"}]}";
+
+    ChatResponse resp = OpenAiCodec.decodeResponse(json);
+    assertNull(resp.getChoices().get(0).getLogprobs());
   }
 }

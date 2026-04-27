@@ -207,4 +207,61 @@ class AnthropicCodecTest {
     String json = "{\"type\":\"content_block_stop\",\"index\":0}";
     assertNull(AnthropicCodec.decodeChunk(json));
   }
+
+  // ========== New Parameter Encoding Tests ==========
+
+  @Test
+  void encodeRequestWithTopP() {
+    ChatRequest req =
+        ChatRequest.builder().model("m").addMessage(ChatMessage.user("hi")).topP(0.95).build();
+    String json = AnthropicCodec.encodeRequest(req, "key");
+    assertTrue(json.contains("\"top_p\":0.95"));
+  }
+
+  @Test
+  void encodeRequestWithSeed() {
+    ChatRequest req =
+        ChatRequest.builder().model("m").addMessage(ChatMessage.user("hi")).seed(42).build();
+    String json = AnthropicCodec.encodeRequest(req, "key");
+    assertTrue(json.contains("\"seed\":42"));
+  }
+
+  @Test
+  void encodeRequestWithStopSequences() {
+    ChatRequest req =
+        ChatRequest.builder()
+            .model("m")
+            .addMessage(ChatMessage.user("hi"))
+            .stop(Arrays.asList("\n", "STOP"))
+            .build();
+    String json = AnthropicCodec.encodeRequest(req, "key");
+    assertTrue(json.contains("\"stop_sequences\":[\"\\n\",\"STOP\"]"));
+    // Must NOT contain OpenAI-style "stop" key at top level
+    assertFalse(json.contains("\"stop\":["));
+  }
+
+  @Test
+  void encodeRequestLogprobsIgnored() {
+    ChatRequest req =
+        ChatRequest.builder()
+            .model("m")
+            .addMessage(ChatMessage.user("hi"))
+            .logprobs(true)
+            .topLogprobs(5)
+            .build();
+    String json = AnthropicCodec.encodeRequest(req, "key");
+    assertFalse(json.contains("logprobs"));
+  }
+
+  @Test
+  void encodeRequestResponseFormatIgnored() {
+    ChatRequest req =
+        ChatRequest.builder()
+            .model("m")
+            .addMessage(ChatMessage.user("hi"))
+            .responseFormat("{\"type\":\"json_object\"}")
+            .build();
+    String json = AnthropicCodec.encodeRequest(req, "key");
+    assertFalse(json.contains("response_format"));
+  }
 }

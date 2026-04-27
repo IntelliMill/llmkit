@@ -140,6 +140,78 @@ public final class JsonReader {
     return json;
   }
 
+  /** Read a floating-point value for a given key. */
+  public Double readDouble(String key) {
+    String pattern = "\"" + key + "\"";
+    int idx = json.indexOf(pattern, pos);
+    if (idx < 0) {
+      idx = json.indexOf(pattern);
+      if (idx < 0) return null;
+    }
+    int colonIdx = json.indexOf(':', idx + pattern.length());
+    if (colonIdx < 0) return null;
+
+    int valueStart = colonIdx + 1;
+    while (valueStart < json.length() && json.charAt(valueStart) == ' ') {
+      valueStart++;
+    }
+
+    int valueEnd = valueStart;
+    if (valueEnd < json.length() && json.charAt(valueEnd) == '-') {
+      valueEnd++;
+    }
+    boolean seenDot = false;
+    boolean seenExp = false;
+    while (valueEnd < json.length()) {
+      char c = json.charAt(valueEnd);
+      if (Character.isDigit(c)) {
+        valueEnd++;
+      } else if (c == '.' && !seenDot && !seenExp) {
+        seenDot = true;
+        valueEnd++;
+      } else if ((c == 'e' || c == 'E') && !seenExp) {
+        seenExp = true;
+        valueEnd++;
+        if (valueEnd < json.length()
+            && (json.charAt(valueEnd) == '+' || json.charAt(valueEnd) == '-')) {
+          valueEnd++;
+        }
+      } else {
+        break;
+      }
+    }
+    if (valueEnd == valueStart) return null;
+    try {
+      return Double.parseDouble(json.substring(valueStart, valueEnd));
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
+
+  /** Read a boolean value for a given key. */
+  public Boolean readBoolean(String key) {
+    String pattern = "\"" + key + "\"";
+    int idx = json.indexOf(pattern, pos);
+    if (idx < 0) {
+      idx = json.indexOf(pattern);
+      if (idx < 0) return null;
+    }
+    int colonIdx = json.indexOf(':', idx + pattern.length());
+    if (colonIdx < 0) return null;
+
+    int valueStart = colonIdx + 1;
+    while (valueStart < json.length() && json.charAt(valueStart) == ' ') {
+      valueStart++;
+    }
+
+    if (json.startsWith("true", valueStart)) {
+      return Boolean.TRUE;
+    } else if (json.startsWith("false", valueStart)) {
+      return Boolean.FALSE;
+    }
+    return null;
+  }
+
   private String readQuotedString(int start) {
     StringBuilder sb = new StringBuilder();
     int i = start;

@@ -14,7 +14,12 @@ import io.llmkit.model.Usage;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Encodes requests and decodes responses for the Anthropic Messages API. */
+/**
+ * Encodes requests and decodes responses for the Anthropic Messages API.
+ *
+ * <p>The following ChatRequest fields are silently ignored because Anthropic does not support them:
+ * {@code logprobs}, {@code topLogprobs}, {@code responseFormat}.
+ */
 public final class AnthropicCodec {
 
   private AnthropicCodec() {}
@@ -31,6 +36,19 @@ public final class AnthropicCodec {
     }
     if (request.getTemperature() != null) {
       w.field("temperature", request.getTemperature());
+    }
+    if (request.getTopP() != null) {
+      w.field("top_p", request.getTopP());
+    }
+    if (request.getSeed() != null) {
+      w.field("seed", request.getSeed());
+    }
+    if (!request.getStop().isEmpty()) {
+      JsonWriter.ArrayWriter stopArr = w.array("stop_sequences");
+      for (String s : request.getStop()) {
+        stopArr.string(s);
+      }
+      stopArr.end();
     }
 
     // Anthropic uses a separate system field

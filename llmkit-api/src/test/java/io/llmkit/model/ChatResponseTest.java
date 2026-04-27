@@ -45,4 +45,22 @@ class ChatResponseTest {
     assertEquals("test", choice.getMessage().getContent());
     assertEquals("length", choice.getFinishReason());
   }
+
+  @Test
+  void choiceWithLogprobs() {
+    ChatMessage msg = ChatMessage.assistant("test");
+    TokenLogprob tl = new TokenLogprob("test", -0.12, null);
+    ChoiceLogprobs lp = new ChoiceLogprobs(Arrays.asList(tl));
+    ChatResponse.Choice choice = new ChatResponse.Choice(0, msg, "stop", lp);
+    assertNotNull(choice.getLogprobs());
+    assertEquals(1, choice.getLogprobs().getContent().size());
+    assertEquals("test", choice.getLogprobs().getContent().get(0).getToken());
+  }
+
+  @Test
+  void choiceWithoutLogprobsIsNull() {
+    ChatMessage msg = ChatMessage.assistant("test");
+    ChatResponse.Choice choice = new ChatResponse.Choice(0, msg, "stop");
+    assertNull(choice.getLogprobs());
+  }
 }

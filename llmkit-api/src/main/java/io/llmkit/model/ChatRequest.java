@@ -12,6 +12,12 @@ public final class ChatRequest {
   private final Double temperature;
   private final Integer maxTokens;
   private final List<ToolDefinition> tools;
+  private final Double topP;
+  private final Integer seed;
+  private final List<String> stop;
+  private final Boolean logprobs;
+  private final Integer topLogprobs;
+  private final String responseFormat;
 
   private ChatRequest(Builder builder) {
     this.model = builder.model;
@@ -22,6 +28,15 @@ public final class ChatRequest {
         builder.tools != null
             ? Collections.unmodifiableList(new ArrayList<>(builder.tools))
             : Collections.<ToolDefinition>emptyList();
+    this.topP = builder.topP;
+    this.seed = builder.seed;
+    this.stop =
+        builder.stop != null
+            ? Collections.unmodifiableList(new ArrayList<>(builder.stop))
+            : Collections.<String>emptyList();
+    this.logprobs = builder.logprobs;
+    this.topLogprobs = builder.topLogprobs;
+    this.responseFormat = builder.responseFormat;
   }
 
   public String getModel() {
@@ -44,6 +59,54 @@ public final class ChatRequest {
     return tools;
   }
 
+  public Double getTopP() {
+    return topP;
+  }
+
+  public Integer getSeed() {
+    return seed;
+  }
+
+  public List<String> getStop() {
+    return stop;
+  }
+
+  public Boolean getLogprobs() {
+    return logprobs;
+  }
+
+  public Integer getTopLogprobs() {
+    return topLogprobs;
+  }
+
+  public String getResponseFormat() {
+    return responseFormat;
+  }
+
+  /** Create a {@code response_format} value for JSON mode. */
+  public static String jsonResponseFormat() {
+    return "{\"type\":\"json_object\"}";
+  }
+
+  /** Create a {@code response_format} value for text mode. */
+  public static String textResponseFormat() {
+    return "{\"type\":\"text\"}";
+  }
+
+  /**
+   * Create a {@code response_format} value for structured output with a JSON schema.
+   *
+   * @param name a name for this response format
+   * @param jsonSchema the JSON schema string
+   */
+  public static String schemaResponseFormat(String name, String jsonSchema) {
+    return "{\"type\":\"json_schema\",\"json_schema\":{\"name\":\""
+        + name
+        + "\",\"strict\":true,\"schema\":"
+        + jsonSchema
+        + "}}";
+  }
+
   public static Builder builder() {
     return new Builder();
   }
@@ -54,6 +117,12 @@ public final class ChatRequest {
     private Double temperature;
     private Integer maxTokens;
     private List<ToolDefinition> tools;
+    private Double topP;
+    private Integer seed;
+    private List<String> stop;
+    private Boolean logprobs;
+    private Integer topLogprobs;
+    private String responseFormat;
 
     private Builder() {}
 
@@ -85,6 +154,36 @@ public final class ChatRequest {
 
     public Builder tools(List<ToolDefinition> tools) {
       this.tools = tools;
+      return this;
+    }
+
+    public Builder topP(Double topP) {
+      this.topP = topP;
+      return this;
+    }
+
+    public Builder seed(Integer seed) {
+      this.seed = seed;
+      return this;
+    }
+
+    public Builder stop(List<String> stop) {
+      this.stop = stop;
+      return this;
+    }
+
+    public Builder logprobs(Boolean logprobs) {
+      this.logprobs = logprobs;
+      return this;
+    }
+
+    public Builder topLogprobs(Integer topLogprobs) {
+      this.topLogprobs = topLogprobs;
+      return this;
+    }
+
+    public Builder responseFormat(String responseFormat) {
+      this.responseFormat = responseFormat;
       return this;
     }
 

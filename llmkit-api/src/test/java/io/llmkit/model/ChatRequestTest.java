@@ -63,5 +63,75 @@ class ChatRequestTest {
     assertNull(req.getMaxTokens());
     assertTrue(req.getMessages().isEmpty());
     assertTrue(req.getTools().isEmpty());
+    assertNull(req.getTopP());
+    assertNull(req.getSeed());
+    assertTrue(req.getStop().isEmpty());
+    assertNull(req.getLogprobs());
+    assertNull(req.getTopLogprobs());
+    assertNull(req.getResponseFormat());
+  }
+
+  @Test
+  void topPField() {
+    ChatRequest req = ChatRequest.builder().topP(0.95).build();
+    assertEquals(0.95, req.getTopP());
+  }
+
+  @Test
+  void seedField() {
+    ChatRequest req = ChatRequest.builder().seed(42).build();
+    assertEquals(42, req.getSeed());
+  }
+
+  @Test
+  void stopField() {
+    ChatRequest req = ChatRequest.builder().stop(Arrays.asList("\n", "stop")).build();
+    assertEquals(Arrays.asList("\n", "stop"), req.getStop());
+  }
+
+  @Test
+  void stopIsImmutable() {
+    ChatRequest req = ChatRequest.builder().stop(Arrays.asList("a")).build();
+    assertThrows(UnsupportedOperationException.class, () -> req.getStop().add("b"));
+  }
+
+  @Test
+  void logprobsField() {
+    ChatRequest req = ChatRequest.builder().logprobs(true).build();
+    assertTrue(req.getLogprobs());
+  }
+
+  @Test
+  void topLogprobsField() {
+    ChatRequest req = ChatRequest.builder().topLogprobs(5).build();
+    assertEquals(5, req.getTopLogprobs());
+  }
+
+  @Test
+  void responseFormatField() {
+    ChatRequest req = ChatRequest.builder().responseFormat("{\"type\":\"json_object\"}").build();
+    assertEquals("{\"type\":\"json_object\"}", req.getResponseFormat());
+  }
+
+  @Test
+  void jsonResponseFormatHelper() {
+    String fmt = ChatRequest.jsonResponseFormat();
+    assertEquals("{\"type\":\"json_object\"}", fmt);
+  }
+
+  @Test
+  void textResponseFormatHelper() {
+    String fmt = ChatRequest.textResponseFormat();
+    assertEquals("{\"type\":\"text\"}", fmt);
+  }
+
+  @Test
+  void schemaResponseFormatHelper() {
+    String schema = "{\"type\":\"object\"}";
+    String fmt = ChatRequest.schemaResponseFormat("my_schema", schema);
+    assertTrue(fmt.contains("\"type\":\"json_schema\""));
+    assertTrue(fmt.contains("\"name\":\"my_schema\""));
+    assertTrue(fmt.contains("\"strict\":true"));
+    assertTrue(fmt.contains("\"schema\""));
   }
 }

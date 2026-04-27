@@ -145,6 +145,12 @@ public abstract class AbstractLlmClient implements LlmClient {
         .temperature(request.getTemperature())
         .maxTokens(request.getMaxTokens())
         .tools(request.getTools())
+        .topP(request.getTopP())
+        .seed(request.getSeed())
+        .stop(request.getStop())
+        .logprobs(request.getLogprobs())
+        .topLogprobs(request.getTopLogprobs())
+        .responseFormat(request.getResponseFormat())
         .build();
   }
 

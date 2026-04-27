@@ -8,8 +8,11 @@ import io.llmkit.model.ChatMessage;
 import io.llmkit.model.ChatRequest;
 import io.llmkit.model.ChatResponse;
 import io.llmkit.model.ChatResponse.Choice;
+import io.llmkit.model.ChoiceLogprobs;
+import io.llmkit.model.TokenLogprob;
 import io.llmkit.model.ToolCall;
 import io.llmkit.model.ToolDefinition;
+import io.llmkit.model.TopLogprob;
 import io.llmkit.model.Usage;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,28 @@ public final class OpenAiCodec {
     }
     if (request.getMaxTokens() != null) {
       w.field("max_tokens", request.getMaxTokens());
+    }
+    if (request.getTopP() != null) {
+      w.field("top_p", request.getTopP());
+    }
+    if (request.getSeed() != null) {
+      w.field("seed", request.getSeed());
+    }
+    if (!request.getStop().isEmpty()) {
+      JsonWriter.ArrayWriter stopArr = w.array("stop");
+      for (String s : request.getStop()) {
+        stopArr.string(s);
+      }
+      stopArr.end();
+    }
+    if (request.getLogprobs() != null) {
+      w.field("logprobs", request.getLogprobs());
+    }
+    if (request.getTopLogprobs() != null) {
+      w.field("top_logprobs", request.getTopLogprobs());
+    }
+    if (request.getResponseFormat() != null) {
+      w.rawFieldDirect("response_format", request.getResponseFormat());
     }
 
     // Messages array
@@ -154,7 +179,13 @@ public final class OpenAiCodec {
         message = decodeMessageFromJson(json, msgIdx);
       }
 
-      choices.add(new Choice(index, message, finishReason));
+      ChoiceLogprobs logprobs = null;
+      int lpIdx = json.indexOf("\"logprobs\"", bounds[0]);
+      if (lpIdx >= 0 && lpIdx < bounds[1]) {
+        logprobs = decodeChoiceLogprobs(json, lpIdx, bounds[1]);
+      }
+
+      choices.add(new Choice(index, message, finishReason, logprobs));
       pos = bounds[1];
     }
   }
@@ -285,5 +316,68 @@ public final class OpenAiCodec {
         prompt != null ? prompt : 0,
         completion != null ? completion : 0,
         total != null ? total : 0);
+  }
+
+  private static ChoiceLogprobs decodeChoiceLogprobs(
+      String json, int logprobsKeyIdx, int parentEnd) {
+    int colonIdx = json.indexOf(':', logprobsKeyIdx + 10);
+    if (colonIdx < 0) return null;
+
+    JsonReader lr = new JsonReader(json);
+    int[] bounds = lr.findObjectBounds(colonIdx + 1);
+    if (bounds == null) return null;
+
+    int contentArrIdx = json.indexOf("\"content\"", bounds[0]);
+    if (contentArrIdx < 0 || contentArrIdx >= bounds[1]) return null;
+
+    int arrStart = json.indexOf('[', contentArrIdx);
+    if (arrStart < 0) return null;
+
+    List<TokenLogprob> tokens = new ArrayList<>();
+    int pos = arrStart + 1;
+    while (pos < json.length()) {
+      while (pos < json.length() && json.charAt(pos) != '{' && json.charAt(pos) != ']') {
+        pos++;
+      }
+      if (pos >= json.length() || json.charAt(pos) == ']') break;
+
+      int[] tokenBounds = lr.findObjectBounds(pos);
+      if (tokenBounds == null) break;
+
+      JsonReader tr = new JsonReader(json.substring(tokenBounds[0], tokenBounds[1]));
+      String token = tr.readString("token");
+      Double logprob = tr.readDouble("logprob");
+
+      List<TopLogprob> topLogprobs = new ArrayList<>();
+      int topArrIdx = json.indexOf("\"top_logprobs\"", tokenBounds[0]);
+      if (topArrIdx >= 0 && topArrIdx < tokenBounds[1]) {
+        int topArrStart = json.indexOf('[', topArrIdx);
+        if (topArrStart >= 0) {
+          int tpos = topArrStart + 1;
+          while (tpos < json.length()) {
+            while (tpos < json.length() && json.charAt(tpos) != '{' && json.charAt(tpos) != ']') {
+              tpos++;
+            }
+            if (tpos >= json.length() || json.charAt(tpos) == ']') break;
+
+            int[] topBounds = new JsonReader(json).findObjectBounds(tpos);
+            if (topBounds == null) break;
+
+            JsonReader tlr = new JsonReader(json.substring(topBounds[0], topBounds[1]));
+            String topToken = tlr.readString("token");
+            Double topLogprob = tlr.readDouble("logprob");
+            if (topToken != null && topLogprob != null) {
+              topLogprobs.add(new TopLogprob(topToken, topLogprob));
+            }
+            tpos = topBounds[1];
+          }
+        }
+      }
+      if (token != null && logprob != null) {
+        tokens.add(new TokenLogprob(token, logprob, topLogprobs));
+      }
+      pos = tokenBounds[1];
+    }
+    return new ChoiceLogprobs(tokens);
   }
 }
