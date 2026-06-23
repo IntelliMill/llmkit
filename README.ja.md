@@ -34,12 +34,12 @@ Java AI エコシステムには現在、**Spring AI**（Spring Boot と強く�
 <dependency>
     <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-api</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 <dependency>
     <groupId>io.github.intellimill</groupId>
     <artifactId>llmkit-openai</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
